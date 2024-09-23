@@ -1,0 +1,16 @@
+<html>
+    <head>
+        <title> All Quotes </title>
+        <link rel = "stylesheet" href = "/static/styles.css">
+    </head>
+
+    <h2>All Quotes</h2>
+    <ul>
+        {% for quote, image in quotes_with_images %}
+            <li>
+                <img src="{{ image }}" alt="Image of person">
+                <p>"{{ quote }}"</p>
+            </li>
+        {% endfor %}
+    </ul>
+</html>
