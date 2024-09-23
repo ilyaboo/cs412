@@ -1,7 +1,8 @@
 <html>
     <head>
         <title> About </title>
-        <link rel = "stylesheet" href = "{% static '/static/styles.css' %}">
+        {% load static %}
+        <link rel = "stylesheet" href = "{% static 'styles.css' %}">
     </head>
 
     <body>

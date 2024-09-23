@@ -7,9 +7,9 @@ quotes = [
     'The single most powerful thing I can be is to be myself.']
 
 images = [
-    "/static/images/rock_1.jpeg",
-    "/static/images/rock_2.jpeg",
-    "/static/images/rock_3.jpeg",
+    "rock_1.jpeg",
+    "rock_2.jpeg",
+    "rock_3.jpeg",
 ]
 
 def quote(request):

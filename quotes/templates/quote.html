@@ -1,14 +1,15 @@
 <html>
     <head>
         <title> Quote of the Day </title>
-        <link rel = "stylesheet" href = "/static/styles.css">
+        {% load static %}
+        <link rel = "stylesheet" href = "{% static 'styles.css' %}">
     </head>
     <body>
 
         <h2>Quote of the Day</h2>
         <p>"{{ quote }}"</p>
 
-        <img src="{{ image }} " alt="Image of the person">
+        <img src = "{% static 'images/' %}{{ image }}" alt = "Image of the person">
 
     </body>
 </html>
