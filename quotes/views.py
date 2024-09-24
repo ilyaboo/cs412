@@ -26,7 +26,7 @@ def quote(request):
     }
     
     # rednering the quote.html template with the context data
-    return render(request, 'quote.html', context)
+    return render(request, 'quotes/quote.html', context)
 
 def show_all(request):
     """ renders show_all.html with all quotes and images """
@@ -40,16 +40,16 @@ def show_all(request):
     }
     
     # rendering the show_all.html template with the context data
-    return render(request, 'show_all.html', context)
+    return render(request, 'quotes/show_all.html', context)
 
 def about(request):
     """ renders about.html """
 
     # rendering an about.html template
-    return render(request, 'about.html')
+    return render(request, 'quotes/about.html')
 
 def base(request):
     """ renders base.html """
 
     # rendering an base.html template
-    return render(request, 'base.html')
+    return render(request, 'quotes/base.html')
