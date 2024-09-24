@@ -1,17 +1,26 @@
 <html>
     <head>
-        <title> All Quotes </title>
+        <title>All Quotes</title>
         {% load static %}
-        <link rel = "stylesheet" href = "{% static 'styles.css' %}">
+        <link rel="stylesheet" href="{% static 'styles.css' %}?v={{ time.time|floatformat:0 }}">
     </head>
+    <body>
 
-    <h2>All Quotes</h2>
-    <ul>
-        {% for quote, image in quotes_with_images %}
-            <li>
-                <img src = "{% static 'images/' %}{{ image }}" alt = "Image of person">
-                <p> "{{ quote }}" </p>
-            </li>
-        {% endfor %}
-    </ul>
+        <h2> Quotes by Dwayne "The Rock" Johnson</h2>
+        <br>
+
+        <table class = "quote-table">
+            {% for quote, image in quotes_with_images %}
+                <tr>
+                    <td>
+                        <img src="{% static 'images/' %}{{ image }}">
+                    </td>
+                    <td>
+                        <p class = "quote-text">"{{ quote }}"</p>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+
+    </body>
 </html>

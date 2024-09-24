@@ -1,13 +1,30 @@
 <html>
     <head>
-        <title> About </title>
+        <title> About Dwayne "The Rock" Johnson </title>
         {% load static %}
-        <link rel = "stylesheet" href = "{% static 'styles.css' %}">
+        <link rel = "stylesheet" href = "{% static 'styles.css' %}?v={{ time.time|floatformat:0 }}">
     </head>
 
     <body>
-    <h2>About Franklin D. Roosevelt</h2>
-    <p>Franklin Delano Roosevelt was the 32nd president of the United States, serving from 1933 to 1945.</p>
-    </body>
 
+        <h2>About Dwayne "The Rock" Johnson</h2>
+        <br>
+
+        <table class = "quote-table">
+            <tr>
+                <td>
+                    <img src = "{% static 'images/rock_bio.jpeg' %}">
+                </td>
+                <td>
+                    <p class = "quote-text">
+                        Dwayne "The Rock" Johnson is a world-renowned actor, producer, and former professional wrestler.
+                        Known for his charm, charisma, and motivational personality, The Rock has become a symbol of
+                        perseverance and hard work. Before conquering Hollywood, he was one of the greatest WWE wrestlers
+                        of all time, captivating millions of fans with his athletic prowess and larger-than-life persona.
+                    </p>
+                </td>
+            </tr>
+        </table>
+
+    </body>
 </html>

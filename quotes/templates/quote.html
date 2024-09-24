@@ -1,15 +1,25 @@
 <html>
     <head>
-        <title> Quote of the Day </title>
+        <title> Random Quote </title>
         {% load static %}
-        <link rel = "stylesheet" href = "{% static 'styles.css' %}">
+        <link rel="stylesheet" href="{% static 'styles.css' %}?v={{ time.time|floatformat:0 }}">
     </head>
+
     <body>
 
-        <h2>Quote of the Day</h2>
-        <p>"{{ quote }}"</p>
-
-        <img src = "{% static 'images/' %}{{ image }}" alt = "Image of the person">
+        <h1> Random Quote by Dwayne "The Rock" Johnson </h1>
+        <br>
+        <br>
+        <table class = "quote-table">
+            <tr>
+                <td>
+                    <img src="{% static 'images/' %}{{ image }}" alt="Image">
+                </td>
+                <td>
+                    <p class="quote-text">"{{ quote }}"</p>
+                </td>
+            </tr>
+        </table>
 
     </body>
 </html>

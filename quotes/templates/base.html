@@ -3,29 +3,36 @@
     <head>
         <title> Quotes App </title>
         {% load static %}
-        <link rel = "stylesheet" href = "{% static 'styles.css' %}">
+        <link rel = "stylesheet" href = "{% static 'styles.css' %}?v={{ time.time|floatformat:0 }}">
     </head>
 
     <body>
+
         <header>
-
-            <h1> Quotes Application </h1>
-
-            <nav>
-                <ul>
-                    <li><a href = ""> Home </a></li>
-                    <li><a href="quote"> Random Quote </a></li>
-                    <li><a href="show_all"> Show All Quotes </a></li>
-                    <li><a href="about"> About </a></li>
-                </ul>
-            </nav>
-
+            <h1>Dwayne "The Rock" Johnson Quotes Application</h1>
         </header>
-    
-        <div class = "content">
-            <p> Quotes by an amazing The Rock </p>
-        </div>
-    
+
+        <table class = "layout-table">
+            <tr>
+                <td class = "info-cell">
+                    <h2>About This Application</h2>
+                    <p>This application provides a collection of inspirational and motivational quotes by Dwayne "The Rock" Johnson. Whether you're looking for a random quote, want to browse all available quotes, or learn more about The Rock himself, this app has it all!</p>
+                    <p>Use the navigation on the right to explore the features of this application.</p>
+                </td>
+                
+                <td class = "nav-cell">
+                    <nav>
+                        <ul>
+                            <li><a href = ""> Home </a></li>
+                            <li><a href="{% url 'random_quote' %}">Random Quote</a></li>
+                            <li><a href="{% url 'show_all' %}">Show All Quotes</a></li>
+                            <li><a href="{% url 'about' %}">About</a></li>
+                        </ul>
+                    </nav>
+                </td>
+            </tr>
+        </table>
+
     </body>
 
 </html>

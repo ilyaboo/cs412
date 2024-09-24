@@ -143,3 +143,85 @@ input[type = "submit"]:hover {
 .left-align{
     text-align: left;
 }
+
+/* table to align image and quote */
+.quote-table {
+    margin: 0 auto;
+    width: 80%;
+    height: 60vh;
+    border-collapse: collapse;
+}
+
+.quote-table td {
+    vertical-align: middle;
+    padding: 20px;
+}
+
+/* style the image */
+.quote-table img {
+    height: 500px;
+    width: auto;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* quote text styling */
+.quote-text {
+    font-size: 2.5em;
+    font-family: 'Cursive', 'Palatino Linotype', 'Book Antiqua', serif;
+    font-style: italic;
+    line-height: 1.5;
+    color: #f0f0f0;
+}
+
+/* layout table for the main section */
+.layout-table {
+    width: 100%;
+    border-spacing: 30px; 
+    margin: 20px auto;
+}
+
+.layout-table td {
+    vertical-align: top;
+    padding: 20px;
+}
+
+/* info cell styling */
+.info-cell {
+    width: 60%;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* navigation cell styling */
+.nav-cell {
+    width: 40%;
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* navigation styling */
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    margin: 10px 0;
+}
+
+nav ul li a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #008f68;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+nav ul li a:hover {
+    background-color: #006f53;
+}
