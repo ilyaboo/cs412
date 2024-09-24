@@ -182,7 +182,7 @@ input[type = "submit"]:hover {
 }
 
 .layout-table td {
-    vertical-align: top;
+    vertical-align: middle;
     padding: 20px;
 }
 
@@ -192,6 +192,7 @@ input[type = "submit"]:hover {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    vertical-align: middle;
 }
 
 /* navigation cell styling */

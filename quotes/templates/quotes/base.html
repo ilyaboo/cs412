@@ -23,15 +23,22 @@
                 <td class = "nav-cell">
                     <nav>
                         <ul>
-                            <li><a href = ""> Home </a></li>
+                            <li><a href = "{% url 'base' %}"> Home </a></li>
                             <li><a href="{% url 'random_quote' %}">Random Quote</a></li>
                             <li><a href="{% url 'show_all' %}">Show All Quotes</a></li>
                             <li><a href="{% url 'about' %}">About</a></li>
+                            <li><a href="{% url 'show_form' %}">Donations</a></li>
                         </ul>
                     </nav>
                 </td>
             </tr>
         </table>
+
+         <div class = "content">
+            {% block content %}
+
+            {% endblock %}
+        </div>
 
     </body>
 

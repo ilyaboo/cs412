@@ -1,0 +1,19 @@
+{% extends 'quotes/base.html' %}
+
+{% block content %}
+<div>
+    <h1> Donations </h1>
+
+    <h2> Please submit your credit card information for a donation. Thank you! :)</h2>
+
+    <form action= "{% url 'submit' %}" method = "POST">
+        {% csrf_token %}
+
+        Name on card: <input type="text" name="name"><br>
+        Card number: <input type="text" name="card_number"><br>
+        Expiration date: <input type="text" name="exp_date"><br>
+        CVV/CVC: <input type="text" name="cvv"><br>
+        <input type="submit">
+    </form>
+</div>
+{% endblock %}

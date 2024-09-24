@@ -53,3 +53,21 @@ def base(request):
 
     # rendering an base.html template
     return render(request, 'quotes/base.html')
+
+def show_form(request):
+    """ shows the contact form """
+
+    return render(request, 'quotes/form.html')
+
+def submit(request):
+    """" handles form submission """
+
+    template_name = 'quotes/confirmation.html'
+    print(request)
+
+    if request.POST:
+        print(request.POST)
+        name = request.POST['name']
+        print(name)
+        
+    return render(request, template_name)

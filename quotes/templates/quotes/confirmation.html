@@ -1,0 +1,14 @@
+{% extends 'quotes/base.html' %}
+
+{% block content %}
+
+<head>
+    <title> Thank you! </title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}?v={{ time.time|floatformat:0 }}">
+</head>
+
+
+<h2> Thank you for your donation! I very much appreciate it! :) </h2>
+
+{% endblock %}
