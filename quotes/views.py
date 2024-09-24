@@ -63,11 +63,12 @@ def submit(request):
     """" handles form submission """
 
     template_name = 'quotes/confirmation.html'
-    print(request)
 
     if request.POST:
-        print(request.POST)
-        name = request.POST['name']
-        print(name)
-        
+        print("\n\n\n\n\n")
+        print("Form Data:")
+        for key, value in request.POST.items():
+            print(f"{key}: {value}")
+        print("\n\n\n\n\n")
+
     return render(request, template_name)
