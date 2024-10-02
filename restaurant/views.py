@@ -66,7 +66,7 @@ def submit(request):
         special_instructions = request.POST.get('special_instructions', '')
 
         # calculating the expected order completion time (randomly between 30 and 60 minutes)
-        preparation_time = random.randint(30, 60) - 240
+        preparation_time = random.randint(30, 60)
         expected_ready_time = datetime.now() + timedelta(minutes = preparation_time)
         formatted_ready_time = expected_ready_time.strftime('%I:%M %p')
 
