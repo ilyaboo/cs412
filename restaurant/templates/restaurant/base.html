@@ -1,0 +1,45 @@
+<html>
+
+    <head>
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'styles_rest.css' %}?v=1.1    ">
+    </head>
+
+    <body>
+        <div class = "grid-container">
+
+            <header>
+                <h1> 🇮🇹🍷 Italian Restaurant "Maurizio Arrivabene" 🧑‍🍳️🍝 </h1>
+            </header>
+            
+            <nav>
+                    <a href = "{% url 'main' %}"> Home </a>
+                    <a href="{% url 'order' %}">Order</a>
+            </nav>
+
+            <main>
+                <div class = "content">
+                    {% block content %}
+        
+                    {% endblock %}
+                </div>
+            </main>
+
+            <aside>
+                <h3> Fresh Produce </h3>
+                <img src="{% static 'images/side_food.jpg' %}">
+                <h3> Every Day </h3>
+            </aside>
+
+            <footer>
+
+
+            </footer>
+        </div>
+
+
+         
+
+    </body>
+
+</html>

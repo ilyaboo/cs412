@@ -1,6 +1,13 @@
 {% extends 'quotes/base.html' %}
 
 {% block content %}
+
+<head>
+    <title> Form </title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}?v={{ time.time|floatformat:0 }}">
+</head>
+
 <div>
     <h1> Donations </h1>
 

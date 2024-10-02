@@ -1,0 +1,38 @@
+{% extends 'Restaurant/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<head>
+    <title> Confirmation </title>
+</head>
+
+<body>
+
+    <h3>Thank you for your order, {{ customer_name }}!</h3>
+
+    <div style="text-align: center;">
+    <h4>Your Order:</h4>
+        {% for item in ordered_items %}
+            {{ item }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+
+
+    <h4>Special Instructions:</h4>
+    {{ special_instructions|default:"No special instructions provided." }}
+
+    <h4>Customer Information:</h4>
+        <strong>Name:</strong> {{ customer_name }} <br>
+        <strong>Phone:</strong> {{ customer_phone }}<br>
+        <strong>Email:</strong> {{ customer_email }}
+
+    <h4>Expected Ready Time:</h4>
+    Your order will be ready by <strong>{{ ready_time }}</strong>.
+
+    </div>
+    <br>
+    <img src="{% static 'images/order_confirmed.jpg' %}" style="width: 500px; height: auto;">
+</body>
+
+{% endblock %}

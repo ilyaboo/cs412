@@ -1,0 +1,75 @@
+{% extends 'Restaurant/base.html' %}
+
+{% block content %}
+
+<head>
+    <title> Order </title>
+</head>
+
+<div>
+    <h2> Place an Order </h2>
+
+    <form action= "{% url 'confirmation' %}" method = "POST">
+        {% csrf_token %}
+
+        <!-- food order -->
+
+        <h3 style="text-align: left;"> Select your items: </h3>
+
+        <div>
+            <input type="checkbox" name="leclerc_lasagna"> <strong>Leclerc's Lasagna $14</strong> – Layers of pasta, as consistent as Charles Leclerc's race pace.
+        </div>
+        <div>
+            <input type="checkbox" name="pit_stop_pesto_penne"> <strong>Pit Stop Pesto Penne $12</strong> – Fast, fresh, and ready in record time, just like a perfect pit stop.
+        </div>
+        <div>
+            <input type="checkbox" name="sainz_scuderia_spaghetti"> <strong>Sainz’s Scuderia Spaghetti $13</strong> – A hearty dish with the same smooth handling as Carlos Sainz on track.
+        </div>
+        <div>
+            <input type="checkbox" name="fuel_strategy_fettuccine"> <strong>Fuel Strategy Fettuccine $11</strong> – A perfectly balanced dish, just like a well-planned race strategy.
+        </div>
+        <div>
+            <input type="checkbox" name="pole_position_pappardelle"> <strong>Pole Position Pappardelle $15</strong> – Wide ribbons of pasta leading the race in flavor.
+        </div>
+        <div>
+            <input type="checkbox" name="binotto_bolognese_blunder"> <strong>Binotto’s Bolognese Blunder $14</strong> – A dish as rich as Mattia Binotto’s strategies, but with no room for errors.
+        </div>
+        <div>
+            <input type="checkbox" name="pit_crew_pepperoni"> <strong>Pit Crew Pepperoni $16</strong> – Fast, efficient, and always reliable, just like a well-coordinated pit crew.
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center; margin-left: 20px;">
+            <label><input type="checkbox" name="extra_cheese"> <strong>Extra Cheese $2</strong></label>
+            <label><input type="checkbox" name="mushrooms"> <strong>Mushrooms $1.50</strong></label>
+            <label><input type="checkbox" name="black_olives"> <strong>Black Olives $1.50</strong></label>
+            <label><input type="checkbox" name="green_peppers"> <strong>Green Peppers $1.50</strong></label>
+            <label><input type="checkbox" name="extra_pepperoni"> <strong>Extra Pepperoni $2</strong></label>
+            <label><input type="checkbox" name="onions"> <strong>Onions $1.50</strong></label>
+        </div>
+        
+
+        <h3 style="text-align: left;"> Today's special: </h3>
+
+        <div>
+            <input type="checkbox" name="{{ special_dish }}"> <strong>{{ special_name }}</strong> {{ special_description }}
+        </div>
+
+        <!-- special instructions -->
+        <h3 style = "text-align: left;"> Special Instructions: </h3>
+        <textarea name="special_instructions" rows="4" cols="50" placeholder="Any special instructions (e.g., extra sauce, no onions, etc.)"></textarea>
+
+         <!-- customer information -->
+        <h3 style="text-align: left;"> Your Information: </h3>
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="customer_name" required><br>
+
+        <label for="phone">Phone:</label>
+        <input type="tel" id="phone" name="customer_phone" required><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="customer_email" required><br><br>
+
+        <input type = "submit">
+    </form>
+</div>
+{% endblock %}
