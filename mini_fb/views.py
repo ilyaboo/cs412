@@ -2,11 +2,11 @@ from django.shortcuts import render
 from .models import Profile
 from django.views.generic import ListView
 
-class ShowAllView(ListView):
+class ShowAllProfilesView(ListView):
     '''Create a subclass of ListView to display all users '''
 
     model = Profile
-    template_name = 'mini_fb/show_all.html'
+    template_name = 'mini_fb/show_all_profiles.html'
     context_object_name = 'users'
 
 def show_main(request):

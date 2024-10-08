@@ -1,0 +1,38 @@
+<html>
+
+    <head>
+        {% load static %}
+        <title>Mini FB</title>
+        <link rel="stylesheet" href="{% static 'styles.css' %}?v=1.1">
+    </head>
+
+    <body>
+        <div class="grid-container">
+
+            <header>
+                <h1>🏎️ Formula One Social Network 🏁</h1>
+            </header>
+
+            <nav>
+                <a href="{% url 'show_all' %}">Home</a>
+                <a href="{% url 'show_all' %}">Profiles</a>
+                <a href="{% url 'show_all' %}">About</a>
+                <a href="{% url 'show_all' %}">Contact</a>
+            </nav>
+
+            <main>
+                <div class="content">
+                    {% block content %}
+                    <!-- Content for each page will be placed here -->
+                    {% endblock %}
+                </div>
+            </main>
+
+            <footer>
+                <p>🏁 © 2024 Formula One Social Network | All Rights Reserved 🏎️</p>
+            </footer>
+
+        </div>
+    </body>
+
+</html>
