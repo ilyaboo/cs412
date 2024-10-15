@@ -1,0 +1,26 @@
+{% extends 'mini_fb/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<head>
+    <title> Post a Message </title>
+</head>
+
+<body>
+    <h2> Post a Message </h2>
+
+    <!-- registration form -->
+    <form method="POST">
+        {% csrf_token %}
+        
+        {{ form.as_p }}
+        
+        <!-- Submit button -->
+        <input type="submit" value="Submit">
+    </form>
+    <!-- End form -->
+</body>
+
+{% endblock %}

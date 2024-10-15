@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 class Profile(models.Model):
     ''' encapsulates the idea of a user profile '''
@@ -18,6 +19,9 @@ class Profile(models.Model):
         ''' accessor method that obtains all the status messages of the profile '''
 
         return StatusMessage.objects.filter(profile = self).order_by('-timestamp')
+    
+    def get_absolute_url(self):
+        return reverse('show_profile', kwargs={'pk': self.pk})
 
 class StatusMessage(models.Model):
     ''' encapsulates the idea of a user's status message '''

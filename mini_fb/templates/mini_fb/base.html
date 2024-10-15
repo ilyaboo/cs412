@@ -3,7 +3,7 @@
     <head>
         {% load static %}
         <title>Mini FB</title>
-        <link rel="stylesheet" href="{% static 'styles.css' %}?v=1.1">
+        <link rel="stylesheet" href="{% static 'styles_2.css' %}?v=1.1">
     </head>
 
     <body>
@@ -15,9 +15,7 @@
 
             <nav>
                 <a href="{% url 'show_all' %}">Home</a>
-                <a href="{% url 'show_all' %}">Profiles</a>
-                <a href="{% url 'show_all' %}">About</a>
-                <a href="{% url 'show_all' %}">Contact</a>
+                <a href="{% url 'create_profile' %}">Register</a>
             </nav>
 
             <main>
@@ -30,6 +28,7 @@
 
             <footer>
                 <p>🏁 © 2024 Formula One Social Network | All Rights Reserved 🏎️</p>
+                
             </footer>
 
         </div>
