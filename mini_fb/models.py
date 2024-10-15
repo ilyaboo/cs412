@@ -10,4 +10,23 @@ class Profile(models.Model):
     email_address = models.TextField(blank = False)
     profile_img_url = models.TextField(blank = False)
 
+    def __str__(self):
+        ''' returns a string representation of this Profile object '''
+        return f'{self.first_name} {self.last_name} from {self.city}'
 
+    def get_status_messages(self):
+        ''' accessor method that obtains all the status messages of the profile '''
+
+        return StatusMessage.objects.filter(profile = self).order_by('-timestamp')
+
+class StatusMessage(models.Model):
+    ''' encapsulates the idea of a user's status message '''
+
+    # data attributes
+    timestamp = models.DateTimeField(auto_now=True)
+    message = models.TextField(blank = False)
+    profile = models.ForeignKey("Profile", on_delete = models.CASCADE)
+
+    def __str__(self):
+        ''' returns a string representation of this StatusMessage object '''
+        return f' Published at {self.timestamp} by {self.profile}: {self.message}'
