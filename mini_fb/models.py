@@ -34,3 +34,21 @@ class StatusMessage(models.Model):
     def __str__(self):
         ''' returns a string representation of this StatusMessage object '''
         return f' Published at {self.timestamp} by {self.profile}: {self.message}'
+    
+    def get_images(self):
+        ''' accessor method to get all images associated with a status message '''
+
+        return Image.objects.filter(status_message = self)
+    
+class Image(models.Model):
+    ''' encapsulates the idea of an image '''
+
+    # data attributes
+    image = models.ImageField(blank = False)
+    status_message = models.ForeignKey("StatusMessage", on_delete = models.CASCADE)
+    timestamp = models.DateTimeField(auto_now=True)
+
+
+    def __str__(self):
+        ''' returns a string representation of this StatusMessage object '''
+        return f' Image for {self.status_message.profile}\'s post posted at {self.timestamp}'

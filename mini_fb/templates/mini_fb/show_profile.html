@@ -35,8 +35,9 @@
         <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse;">
             <thead>
                 <tr>
-                    <th>Date Posted</th>
+                    <th style="width: 100px;">Date Posted</th>
                     <th>Message</th>
+                    <th> Images </th>
                 </tr>
             </thead>
             <tbody>
@@ -44,6 +45,13 @@
                     <tr>
                         <td>{{ message.timestamp|date:"F j, Y, g:i a" }}</td>
                         <td>{{ message.message }}</td>
+                        <td>
+                            {% for img in message.get_images %}
+                                <img src="{{ img.image.url }}" alt="{{ img.image.name }}" style="padding-bottom: 10px;">  
+                                <br>
+                            {% endfor %}
+
+                        </td>
                     </tr>
                 {% empty %}
                     <tr>
