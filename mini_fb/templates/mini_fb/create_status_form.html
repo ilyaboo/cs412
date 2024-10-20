@@ -12,12 +12,13 @@
     <h2> Post a Message </h2>
 
     <!-- registration form -->
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         
         {{ form.as_p }}
         
-        <!-- Submit button -->
+        <input type="file" name = "files" multiple />
+        
         <input type="submit" value="Submit">
     </form>
     <!-- End form -->

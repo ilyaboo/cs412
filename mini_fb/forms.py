@@ -40,7 +40,7 @@ class CreateStatusMessageForm(forms.ModelForm):
     ''' a form to add a status message to the database '''
 
     message = forms.CharField(
-        label = "Message Text", 
+        label = "Enter the Message and Attach Images", 
         max_length = 300, 
         widget = forms.TextInput(attrs={'placeholder': 'enter your message here', 'class': 'form-control'})
     )

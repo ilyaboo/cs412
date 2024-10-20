@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse
-from .models import Profile, StatusMessage
+from .models import Profile, StatusMessage, Image
 from .forms import CreateProfileForm, CreateStatusMessageForm
 from django.views.generic import ListView, DetailView, CreateView
 
@@ -49,6 +49,18 @@ class CreateStatusMessageView(CreateView):
 
         # setting the profile of the status message
         form.instance.profile = profile
+
+        sm = form.save()
+
+        # read the file from the form:
+        files = self.request.FILES.getlist('files')
+
+        for f in files:
+            new_image = Image()
+            new_image.image = f
+            new_image.status_message = sm
+            new_image.save()
+
         return super().form_valid(form)
 
     def get_success_url(self):
