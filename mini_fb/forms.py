@@ -75,3 +75,11 @@ class UpdateMessageForm(forms.ModelForm):
         fields = ['message']
 
         widgets = {'message': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your message'})}
+
+class AddStatusMessageImagesForm(forms.ModelForm):
+
+    class Meta:
+        '''associate this form with the status message model '''
+
+        model = StatusMessage
+        fields = []

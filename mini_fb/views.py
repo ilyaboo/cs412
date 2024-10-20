@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.urls import reverse
 from .models import Profile, StatusMessage, Image
-from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm, UpdateMessageForm
+from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm, UpdateMessageForm, AddStatusMessageImagesForm
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 class ShowAllProfilesView(ListView):
@@ -93,7 +93,68 @@ class UpdateStatusMessageView(UpdateView):
         profile_id = self.object.profile.pk
         return reverse('show_profile', kwargs={'pk': profile_id})
     
+class AddStatusMessageImages(UpdateView):
 
+    model = StatusMessage
+    form_class = AddStatusMessageImagesForm
+    template_name = 'mini_fb/add_status_message_images.html'
+
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+        context['status_message'] = self.object
+
+        return context
+    
+    def form_valid(self, form):
+
+        sm = form.save()
+
+        # read the file from the form:
+        files = self.request.FILES.getlist('files')
+
+        for f in files:
+            new_image = Image()
+            new_image.image = f
+            new_image.status_message = sm
+            new_image.save()
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('show_profile', kwargs={'pk': self.object.profile.pk})
+    
+class DeleteStatusMessageImagesView(DeleteView):
+
+    model = StatusMessage
+    form_class = AddStatusMessageImagesForm
+    template_name = 'mini_fb/delete_status_message_images.html'
+
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+        context['status_message'] = self.object
+
+        return context
+
+    def get_success_url(self):
+        return reverse('show_profile', kwargs={'pk': self.object.profile.pk})
+
+class DeleteStatusMessageImageView(DeleteView):
+
+    model = Image
+    template_name = 'mini_fb/delete_status_message_image.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['image'] = self.object  
+        context['status_message'] = self.object.status_message
+        return context
+
+    def get_success_url(self):
+        profile_id = self.object.status_message.profile.pk
+        return reverse('show_profile', kwargs={'pk': profile_id})
+    
 def show_main(request):
     """ renders main.html with general info """
 

@@ -18,6 +18,7 @@
                     <th style="width: 90px;">Date Posted</th>
                     <th>Message</th>
                     <th> Images </th>
+                    <th style="width: 90px;">Modify Images</th>
                 </tr>
             </thead>
         <tbody>
@@ -30,6 +31,26 @@
                             <br>
                         {% endfor %}
 
+                    </td>
+                    <td>
+                        <a href="{% url 'update_message_images' status_message.pk %}" 
+                            style="display: inline-block; background-color: #00a67c; color: white; 
+                                    text-decoration: none; padding: 7px 13px; font-size: 0.8em; 
+                                    border-radius: 10px; transition: background-color 0.3s ease; 
+                                    cursor: pointer; margin: 5px;"
+                            onmouseover="this.style.backgroundColor='#008f68';"
+                            onmouseout="this.style.backgroundColor='#00a67c';">
+                            add images
+                        </a>
+                        <a href="{% url 'delete_message_images' status_message.pk %}" 
+                            style="display: inline-block; background-color: #d9534f; color: white; 
+                                    text-decoration: none; padding: 7px 13px; font-size: 0.8em; 
+                                    border-radius: 10px; transition: background-color 0.3s ease; 
+                                    cursor: pointer; margin: 5px;"
+                            onmouseover="this.style.backgroundColor='#c9302c';"
+                            onmouseout="this.style.backgroundColor='#d9534f';">
+                            delete images
+                        </a>
                     </td>
                 </tr>
         </tbody>
