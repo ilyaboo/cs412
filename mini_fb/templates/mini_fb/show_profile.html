@@ -28,6 +28,10 @@
         </div>
 
         <div style="margin-bottom: 20px;">
+            <a href="{% url 'update_profile' user.pk %}" style="display: block; margin: 20px 0px; padding: 10px 50px; background-color: #008f68; color: white; text-decoration: none; border-radius: 5px; text-align: center;">Update Profile</a>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
             <a href="{% url 'create_status' user.pk %}" style="display: block; margin: 20px 0px; padding: 10px 50px; background-color: #008f68; color: white; text-decoration: none; border-radius: 5px; text-align: center;">Post a Status</a>
         </div>
 

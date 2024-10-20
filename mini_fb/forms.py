@@ -50,3 +50,19 @@ class CreateStatusMessageForm(forms.ModelForm):
 
         model = StatusMessage
         fields = ['message']
+
+class UpdateProfileForm(forms.ModelForm):
+    ''' a form to update the profile in the database '''
+
+    class Meta:
+        ''' associates this form with the Profile model '''
+        model = Profile
+
+        # Specify fields to be updated (exclude first_name and last_name)
+        fields = ['city', 'email_address', 'profile_img_url']
+
+        # Optional: Add widgets for styling
+        widgets = {
+            'city': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your city'}),
+            'email_address': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Enter your email'}),
+            'profile_img_url': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter profile image URL'})}

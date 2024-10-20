@@ -5,18 +5,16 @@
 {% block content %}
 
 <head>
-    <title> Post a Message </title>
+    <title> Update Profile </title>
 </head>
 
 <body>
-    <h2> Post a Message </h2>
+    <h2> Update the Profile </h2>
 
-    <form method="POST" enctype="multipart/form-data">
+    <form method="POST">
         {% csrf_token %}
         
         {{ form.as_p }}
-
-        <input type="file" name = "files" multiple />
         
         <input type="submit" value="Submit">
     </form>

@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from django.urls import reverse
 from .models import Profile, StatusMessage, Image
-from .forms import CreateProfileForm, CreateStatusMessageForm
-from django.views.generic import ListView, DetailView, CreateView
+from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 class ShowAllProfilesView(ListView):
     '''Create a subclass of ListView to display all users '''
@@ -65,6 +65,12 @@ class CreateStatusMessageView(CreateView):
 
     def get_success_url(self):
         return reverse('show_profile', kwargs={'pk': self.kwargs['pk']})
+    
+class UpdateProfileView(UpdateView):
+
+    model = Profile
+    form_class = UpdateProfileForm
+    template_name = 'mini_fb/update_profile_form.html'
 
 def show_main(request):
     """ renders main.html with general info """
