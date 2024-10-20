@@ -1,0 +1,47 @@
+{% extends 'mini_fb/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<head>
+    <title> Modifying a Status </title>
+</head>
+
+<body>
+    <h2> Please Modify the Status Below </h2>
+
+    <table border="1" cellpadding="10" cellspacing="0" 
+            style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+            <thead>
+                <tr>
+                    <th style="width: 90px;">Date Posted</th>
+                    <th>Message</th>
+                    <th> Images </th>
+                </tr>
+            </thead>
+        <tbody>
+                <tr>
+                    <td>{{ status_message.timestamp|date:"F j, Y, g:i a" }}</td>
+                    <td>{{ status_message.message }}</td>
+                    <td>
+                        {% for img in status_message.get_images %}
+                            <img src="{{ img.image.url }}" alt="{{ img.image.name }}" style="padding-bottom: 10px;">  
+                            <br>
+                        {% endfor %}
+
+                    </td>
+                </tr>
+        </tbody>
+    </table>
+
+    <form method="POST">
+        {% csrf_token %}
+        
+        {{ form.as_p }}
+        
+        <input type="submit" value="Submit the Updated Message">
+    </form>
+</body>
+
+{% endblock %}

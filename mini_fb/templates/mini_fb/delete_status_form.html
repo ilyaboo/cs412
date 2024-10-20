@@ -1,0 +1,70 @@
+{% extends 'mini_fb/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<head>
+    <title> Deleting a Status </title>
+</head>
+
+<body>
+    <h2> Are you sure you want to delete this status message? </h2>
+
+    <table border="1" cellpadding="10" cellspacing="0" 
+            style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+            <thead>
+                <tr>
+                    <th style="width: 90px;">Date Posted</th>
+                    <th>Message</th>
+                    <th> Images </th>
+                </tr>
+            </thead>
+        <tbody>
+                <tr>
+                    <td>{{ status_message.timestamp|date:"F j, Y, g:i a" }}</td>
+                    <td>{{ status_message.message }}</td>
+                    <td>
+                        {% for img in status_message.get_images %}
+                            <img src="{{ img.image.url }}" alt="{{ img.image.name }}" style="padding-bottom: 10px;">  
+                            <br>
+                        {% endfor %}
+
+                    </td>
+                </tr>
+        </tbody>
+    </table>
+
+    <table>
+        <tbody>
+            <tr>
+                <td style="text-align: center; background-color: transparent; border: none;">
+                    <form method="POST" style="background-color: transparent; border: none; box-shadow: none; margin: 0; padding: 0;">
+                        {% csrf_token %}
+                        <input type="submit" value="Confirm Delete" 
+                           style="background-color: #d9534f; color: white; border: none; 
+                                  padding: 10px 20px; font-size: 1.2em; cursor: pointer; 
+                                  border-radius: 10px; transition: background-color 0.3s ease;"
+                           onmouseover="this.style.backgroundColor='#c9302c';"
+                           onmouseout="this.style.backgroundColor='#d9534f';">
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center; background-color: transparent; border: none;">
+                    <form method="GET" action="{% url 'show_profile' status_message.profile.pk %}" 
+                      style="background-color: transparent; border: none; box-shadow: none; margin: 0; padding: 0;">
+                      <input type="submit" value="Cancel" 
+                           style="background-color: #00a67c; color: white; border: none; 
+                                  padding: 10px 20px; font-size: 1.2em; cursor: pointer; 
+                                  border-radius: 10px; transition: background-color 0.3s ease;"
+                           onmouseover="this.style.backgroundColor='#008f68';"
+                           onmouseout="this.style.backgroundColor='#00a67c';">
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table> 
+</body>
+
+{% endblock %}
