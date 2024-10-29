@@ -13,4 +13,7 @@ urlpatterns = [
     path('status/<int:pk>/add_images', views.AddStatusMessageImages.as_view(), name='update_message_images'),
     path('status/<int:pk>/delete_images', views.DeleteStatusMessageImagesView.as_view(), name='delete_message_images'),
     path('image/<int:pk>/delete', views.DeleteStatusMessageImageView.as_view(), name='delete_message_image'),
+    path('profile/<int:pk>/add_friend/<int:other_pk>', views.CreateFriendView.as_view(), name='add_friend'),
+    path('profile/<int:pk>/friend_suggestions', views.ShowFriendSuggestionsView.as_view(), name='see_suggestions'),
+    path('profile/<int:pk>/news_feed', views.ShowNewsFeedView.as_view(), name='see_news'),
 ]

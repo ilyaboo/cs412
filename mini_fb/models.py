@@ -28,6 +28,30 @@ class Profile(models.Model):
 
         tmp = list(Friend.objects.filter(profile1 = self) | Friend.objects.filter(profile2 = self))
         return [val.profile1 if val.profile1 != self else val.profile2 for val in tmp]
+    
+    def add_friend(self, other):
+        ''' method that adds a friend to a profile '''
+
+        # checking if the bond should not be created
+        if len(list(Friend.objects.filter(profile1 = self) & Friend.objects.filter(profile2 = other))) != 0 or \
+           len(list(Friend.objects.filter(profile1 = other) & Friend.objects.filter(profile2 = self))) != 0 or \
+           self == other:
+            return
+        
+        Friend(profile1 = self, profile2 = other).save()
+        return
+    
+    def get_friend_suggestions(self):
+        ''' returns Profile that can be added as friends for a user '''
+        
+        friends = self.get_friends()
+        return [profile for profile in Profile.objects.all() if profile not in friends and profile != self]
+    
+    def get_news_feed(self):
+        ''' returns status messages for a user's news feed '''
+
+        statuses = StatusMessage.objects.all().order_by('-timestamp')
+        return [status for status in statuses if status.profile in self.get_friends()]
 
 class StatusMessage(models.Model):
     ''' encapsulates the idea of a user's status message '''

@@ -1,8 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 from .models import Profile, StatusMessage, Image, Friend
 from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm, UpdateMessageForm, AddStatusMessageImagesForm
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
 
 class ShowAllProfilesView(ListView):
     '''Create a subclass of ListView to display all users '''
@@ -167,6 +167,50 @@ class DeleteStatusMessageImageView(DeleteView):
     def get_success_url(self):
         profile_id = self.object.status_message.profile.pk
         return reverse('show_profile', kwargs={'pk': profile_id})
+    
+class CreateFriendView(View):
+
+    def dispatch(self, request, *args, **kwargs):
+
+        pk = self.kwargs['pk']
+        other_pk = self.kwargs['other_pk']
+
+        profile = list(Profile.objects.filter(pk = pk))[0]
+        other_profile = list(Profile.objects.filter(pk = other_pk))[0]
+
+        profile.add_friend(other_profile)
+
+        # Redirect back to the profile page of the current user
+        return redirect('show_profile', pk=pk)
+    
+class ShowFriendSuggestionsView(DetailView):
+
+    template_name = 'mini_fb/friend_suggestions.html'
+    model = Profile
+    context_object_name = 'user'
+
+    def get_success_url(self):
+        return reverse('profile', kwargs={'pk': self.object.pk})
+    
+    def get_context_data(self, **kwargs):
+        ''' override to have friends in groups of 5 '''
+
+        context = super().get_context_data(**kwargs)
+        profile = self.get_object()
+        friend_suggestions = profile.get_friend_suggestions()
+
+        # grouping friends into rows of 5
+        friends_in_rows = [friend_suggestions[i:i + 5] for i in range(0, len(friend_suggestions), 5)]
+        context['friends_in_rows'] = friends_in_rows
+        
+        return context
+    
+class ShowNewsFeedView(DetailView):
+
+    template_name = 'mini_fb/news_feed.html'
+    model = Profile
+    context_object_name = 'user'
+
     
 def show_main(request):
     """ renders main.html with general info """

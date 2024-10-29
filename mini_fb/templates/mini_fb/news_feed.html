@@ -1,0 +1,83 @@
+{% extends 'mini_fb/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<head>
+    <title>{{ profile.first_name }} {{ profile.last_name }}'s News Feed</title>
+</head>
+
+<body>
+    <div style="width: 80%; margin: 0 auto;">
+        <h2>{{ user.first_name }} {{ user.last_name }}'s News Feed</h2>
+
+        <div style="display: flex; align-items: center; margin-bottom: 20px;">
+
+            <div style="margin-right: 20px;">
+                <img src="{{ user.profile_img_url }}" alt="Profile Image" style="width:300px; height:auto; border-radius: 10px;">
+            </div>
+
+            <div>
+                <p><strong>First Name:</strong> {{ user.first_name }}</p>
+                <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+                <p><strong>City:</strong> {{ user.city }}</p>
+                <p><strong>Email:</strong> {{ user.email_address }}</p>
+            </div>
+
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <a href="{% url 'show_profile' user.pk %}" style="display: block; margin: 20px 0px; padding: 10px 50px; background-color: #008f68; color: white; text-decoration: none; border-radius: 5px; text-align: center;">Back to Profile</a>
+        </div>
+
+        <h3> News Feed</h3>
+        <table border="1" cellpadding="10" cellspacing="0" 
+            style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+            <thead>
+                <tr>
+                    <th style="width: 120px; "> User </th>
+                    <th style="width: 90px;">Date Posted</th>
+                    <th>Message</th>
+                    <th> Images </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for message in user.get_news_feed %}
+                    <tr>
+                        <td style="text-align: center; padding: 15px; ">
+                            <a href="{% url 'show_profile' message.profile.pk %}">
+                            <div style="width: 100px; height: 100px; border-radius: 50%; margin: 0 auto; 
+                            display: flex; align-items: center; justify-content: center; overflow: hidden; background-color: #f0f0f0;">
+                                <img src="{{ message.profile.profile_img_url }}" 
+                                    alt="{{ friend.first_name }}'s Profile Image" 
+                                    style="width: 100%; height: auto; min-height: 100%; object-fit: cover;">
+                            </div>
+                                <br>
+                                {{ message.profile.first_name }}
+                                <br>
+                                {{ message.profile.last_name }}
+                            </a>
+                        </td>
+                        <td>{{ message.timestamp|date:"F j, Y, g:i a" }}</td>
+                        <td>{{ message.message }}</td>
+                        <td>
+                            {% for img in message.get_images %}
+                            <img src="{{ img.image.url }}" alt="{{ img.image.name }}" 
+                            style="padding-bottom: 10px; max-width: 300px; height: auto;">
+                                <br>
+                            {% endfor %}
+
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">No status messages yet.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+{% endblock %}
