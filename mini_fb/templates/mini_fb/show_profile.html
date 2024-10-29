@@ -87,6 +87,46 @@
                 {% endfor %}
             </tbody>
         </table>
+
+
+        <h3>{{ user.first_name }}'s Friends</h3>
+        <table border="1" cellpadding="10" cellspacing="0" 
+            style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+            <thead>
+                <tr>
+                    <th colspan="5" style="text-align: center; background-color: #008f68; color: white; padding: 10px;"> 
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in friends_in_rows %}
+                    <tr>
+                        {% for friend in row %}
+                            <td style="text-align: center; padding: 15px; ">
+                                <a href="{% url 'show_profile' friend.pk %}">
+                                <div style="width: 100px; height: 100px; border-radius: 50%; margin: 0 auto; 
+                                display: flex; align-items: center; justify-content: center; overflow: hidden; background-color: #f0f0f0;">
+                                    <img src="{{ friend.profile_img_url }}" 
+                                        alt="{{ friend.first_name }}'s Profile Image" 
+                                        style="width: 100%; height: auto; min-height: 100%; object-fit: cover;">
+                                </div>
+                                    <br>
+                                    {{ friend.first_name }}
+                                    <br>
+                                    {{ friend.last_name }}
+                                </a>
+                            </td>
+                        {% empty %}
+                            <td colspan="5" style="text-align: center; padding: 20px;">
+                                No friends yet.
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
     </div>
 </body>
 

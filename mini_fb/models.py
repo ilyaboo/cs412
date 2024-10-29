@@ -22,6 +22,12 @@ class Profile(models.Model):
     
     def get_absolute_url(self):
         return reverse('show_profile', kwargs={'pk': self.pk})
+    
+    def get_friends(self):
+        ''' accessor method that obtains all the friends of the profile '''
+
+        tmp = list(Friend.objects.filter(profile1 = self) | Friend.objects.filter(profile2 = self))
+        return [val.profile1 if val.profile1 != self else val.profile2 for val in tmp]
 
 class StatusMessage(models.Model):
     ''' encapsulates the idea of a user's status message '''
@@ -52,3 +58,13 @@ class Image(models.Model):
     def __str__(self):
         ''' returns a string representation of this StatusMessage object '''
         return f' Image for {self.status_message.profile}\'s post posted at {self.timestamp}'
+    
+class Friend(models.Model):
+    ''' encapsulates the idea of a friend relation between two users '''
+
+    profile1 = models.ForeignKey("Profile", on_delete = models.CASCADE, related_name="profile1")
+    profile2 = models.ForeignKey("Profile", on_delete = models.CASCADE, related_name="profile2")
+    timestamp = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'{self.profile1.first_name} {self.profile1.last_name} & {self.profile2.first_name} {self.profile2.last_name}'

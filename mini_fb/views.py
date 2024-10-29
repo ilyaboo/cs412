@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse
-from .models import Profile, StatusMessage, Image
+from .models import Profile, StatusMessage, Image, Friend
 from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm, UpdateMessageForm, AddStatusMessageImagesForm
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
@@ -20,6 +20,19 @@ class ShowProfilePageView(DetailView):
 
     def get_success_url(self):
         return reverse('profile', kwargs={'pk': self.object.pk})
+    
+    def get_context_data(self, **kwargs):
+        ''' override to have friends in groups of 5 '''
+
+        context = super().get_context_data(**kwargs)
+        profile = self.get_object()
+        friends = profile.get_friends()
+
+        # grouping friends into rows of 5
+        friends_in_rows = [friends[i:i + 5] for i in range(0, len(friends), 5)]
+        context['friends_in_rows'] = friends_in_rows
+        
+        return context
 
 class CreateProfileView(CreateView):
 
