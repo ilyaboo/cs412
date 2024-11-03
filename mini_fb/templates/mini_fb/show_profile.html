@@ -10,38 +10,40 @@
 
 <body>
     <div style="width: 80%; margin: 0 auto;">
-        <h2>{{ user.first_name }} {{ user.last_name }}'s Profile</h2>
+        <h2>{{ profile.first_name }} {{ profile.last_name }}'s Profile</h2>
 
         <div style="display: flex; align-items: center; margin-bottom: 20px;">
 
             <div style="margin-right: 20px;">
-                <img src="{{ user.profile_img_url }}" alt="Profile Image" style="width:300px; height:auto; border-radius: 10px;">
+                <img src="{{ profile.profile_img_url }}" alt="Profile Image" style="width:300px; height:auto; border-radius: 10px;">
             </div>
 
             <div>
-                <p><strong>First Name:</strong> {{ user.first_name }}</p>
-                <p><strong>Last Name:</strong> {{ user.last_name }}</p>
-                <p><strong>City:</strong> {{ user.city }}</p>
-                <p><strong>Email:</strong> {{ user.email_address }}</p>
+                <p><strong>First Name:</strong> {{ profile.first_name }}</p>
+                <p><strong>Last Name:</strong> {{ profile.last_name }}</p>
+                <p><strong>City:</strong> {{ profile.city }}</p>
+                <p><strong>Email:</strong> {{ profile.email_address }}</p>
             </div>
 
         </div>
 
-        <div style="margin-bottom: 20px;">
-            <a href="{% url 'update_profile' user.pk %}" style="display: block; margin: 20px 0px; padding: 10px 50px; background-color: #008f68; color: white; text-decoration: none; border-radius: 5px; text-align: center;">Update Profile</a>
-        </div>
-        
-        <div style="margin-bottom: 20px;">
-            <a href="{% url 'create_status' user.pk %}" style="display: block; margin: 20px 0px; padding: 10px 50px; background-color: #008f68; color: white; text-decoration: none; border-radius: 5px; text-align: center;">Post a Status</a>
-        </div>
+        {% if request.user.is_authenticated and request.user == profile.user_key %}
+            <div style="margin-bottom: 20px;">
+                <a href="{% url 'update_profile' profile.pk %}" style="display: block; margin: 20px 0px; padding: 10px 50px; background-color: #008f68; color: white; text-decoration: none; border-radius: 5px; text-align: center;">Update Profile</a>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <a href="{% url 'create_status' profile.pk %}" style="display: block; margin: 20px 0px; padding: 10px 50px; background-color: #008f68; color: white; text-decoration: none; border-radius: 5px; text-align: center;">Post a Status</a>
+            </div>
 
-        <div style="margin-bottom: 20px;">
-            <a href="{% url 'see_suggestions' user.pk %}" style="display: block; margin: 20px 0px; padding: 10px 50px; background-color: #008f68; color: white; text-decoration: none; border-radius: 5px; text-align: center;">Friend Suggestions</a>
-        </div>
+            <div style="margin-bottom: 20px;">
+                <a href="{% url 'see_suggestions' profile.pk %}" style="display: block; margin: 20px 0px; padding: 10px 50px; background-color: #008f68; color: white; text-decoration: none; border-radius: 5px; text-align: center;">Friend Suggestions</a>
+            </div>
 
-        <div style="margin-bottom: 20px;">
-            <a href="{% url 'see_news' user.pk %}" style="display: block; margin: 20px 0px; padding: 10px 50px; background-color: #008f68; color: white; text-decoration: none; border-radius: 5px; text-align: center;">News Feed</a>
-        </div>
+            <div style="margin-bottom: 20px;">
+                <a href="{% url 'see_news' profile.pk %}" style="display: block; margin: 20px 0px; padding: 10px 50px; background-color: #008f68; color: white; text-decoration: none; border-radius: 5px; text-align: center;">News Feed</a>
+            </div>
+        {% endif %}
 
         <h3>Status Messages</h3>
         <table border="1" cellpadding="10" cellspacing="0" 
@@ -55,7 +57,7 @@
                 </tr>
             </thead>
             <tbody>
-                {% for message in user.get_status_messages %}
+                {% for message in profile.get_status_messages %}
                     <tr>
                         <td>
                             <a href="{% url 'update_message' message.pk %}" 
@@ -97,7 +99,7 @@
         </table>
 
 
-        <h3>{{ user.first_name }}'s Friends</h3>
+        <h3>{{ profile.first_name }}'s Friends</h3>
         <table border="1" cellpadding="10" cellspacing="0" 
             style="width: 100%; border-collapse: collapse; table-layout: fixed;">
             <thead style="border: none; padding: 0; margin: 0;">

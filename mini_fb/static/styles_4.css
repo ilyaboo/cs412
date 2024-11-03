@@ -251,3 +251,19 @@ input[type="file"]::file-selector-button:hover {
 input[type="file"] + input[type="submit"] {
     margin-top: 20px;
 }
+
+/* Style for buttons to look like links */
+.link-style-button {
+    color: #99f0c2;            /* Link color */
+    font-weight: bold;         /* Match font weight of links */
+    background: none;          /* Remove button background */
+    border: none;              /* Remove button border */
+    text-decoration: none;     /* Remove underline */
+    cursor: pointer;           /* Pointer cursor on hover */
+    padding: 0;                /* Remove padding to match link appearance */
+}
+
+.link-style-button:hover {
+    color: #008f68;            /* Match hover color of links */
+    text-decoration: underline; /* Add underline on hover */
+}
