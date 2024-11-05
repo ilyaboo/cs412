@@ -20,12 +20,17 @@
 
                 <!-- URLs that depend on authentication status -->
                 {% if request.user.is_authenticated %}
-                <form action="{% url 'logout' %}" method="post" style="display: inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="link-style-button">
-                        Log out
-                    </button>
-                </form>
+                    {% if user_profile %}
+                        <a href="{% url 'show_profile' user_profile.pk %}">My Profile</a>
+                    {% else %}
+                        <a href="{% url 'create_profile' %}">Create My Profile</a>
+                    {% endif %}
+                    <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="link-style-button">
+                            Log out
+                        </button>
+                    </form>
                 {% else %}
                     <a href="{% url 'login' %}">Log in</a>
                 {% endif %}

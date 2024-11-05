@@ -1,10 +1,12 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from .models import Profile, StatusMessage, Image, Friend, User
 from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm, UpdateMessageForm, AddStatusMessageImagesForm
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login
+from django.core.exceptions import PermissionDenied
+
 
 
 class ShowAllProfilesView(ListView):
@@ -14,12 +16,17 @@ class ShowAllProfilesView(ListView):
     template_name = 'mini_fb/show_all_profiles.html'
     context_object_name = 'users'
 
-    def dispatch(self, request):
-        ''' method that shows/debugs logged in user '''
-
-        print(f"Logged in user: request.user={request.user}")
-        print(f"Logged in user: request.user.is_authenticated={request.user.is_authenticated}")
-        return super().dispatch(request)
+    def get_context_data(self, **kwargs):
+        '''Add user profile to the context if the user is authenticated'''
+        context = super().get_context_data(**kwargs)
+        
+        # getting the profile associated with the logged-in user, if it exists
+        if self.request.user.is_authenticated:
+            context['user_profile'] = Profile.objects.filter(user_key=self.request.user).first()
+        else:
+            context['user_profile'] = None
+        
+        return context
 
 class ShowProfilePageView(DetailView):
     ''' Create a subclass of DetailView to display user's profile '''
@@ -41,6 +48,12 @@ class ShowProfilePageView(DetailView):
         # grouping friends into rows of 5
         friends_in_rows = [friends[i:i + 5] for i in range(0, len(friends), 5)]
         context['friends_in_rows'] = friends_in_rows
+
+        # getting the profile associated with the logged-in user, if it exists
+        if self.request.user.is_authenticated:
+            context['user_profile'] = Profile.objects.filter(user_key=self.request.user).first()
+        else:
+            context['user_profile'] = None
         
         return context
 
@@ -59,41 +72,30 @@ class CreateStatusMessageView(LoginRequiredMixin, CreateView):
     # passing profile information to the template
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        # getting the profile by its pk
-        profile = Profile.objects.get(pk=self.kwargs['pk'])
-        context['profile'] = profile
-
+        user_profile = get_object_or_404(Profile, user_key=self.request.user)
+        context['profile'] = user_profile
+        context['user_profile'] = user_profile  # Set user_profile for consistency
         return context
     
     # attaching the profile to the StatusMessage before saving
     def form_valid(self, form):
-        profile = Profile.objects.get(pk=self.kwargs['pk'])
+        user_profile = get_object_or_404(Profile, user_key=self.request.user)
+        form.instance.profile = user_profile
 
-        # setting the profile of the status message
-        form.instance.profile = profile
-
-        sm = form.save()
-
-        # read the file from the form:
+        # saving the form and handle image uploads if any
+        status_message = form.save()
         files = self.request.FILES.getlist('files')
-
         for f in files:
             new_image = Image()
             new_image.image = f
-            new_image.status_message = sm
+            new_image.status_message = status_message
             new_image.save()
-
-        # find the logged in user
-        user = self.request.user
-
-        # attach user to form instance (Article object):
-        form.instance.user = user
 
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('show_profile', kwargs={'pk': self.kwargs['pk']})
+        user_profile = get_object_or_404(Profile, user_key=self.request.user)
+        return reverse('show_profile', kwargs={'pk': user_profile.pk})
     
     def get_login_url(self) -> str:
         ''' returns the URL required for login '''
@@ -105,7 +107,17 @@ class UpdateProfileView(UpdateView, LoginRequiredMixin):
     form_class = UpdateProfileForm
     template_name = 'mini_fb/update_profile_form.html'
 
-class DeleteStatusMessageView(DeleteView):
+    def get_object(self, queryset=None):
+        """ retrieving the profile associated with the logged-in user """
+        return get_object_or_404(Profile, user_key=self.request.user)
+
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+        context['user_profile'] = self.get_object()
+        return context
+
+class DeleteStatusMessageView(DeleteView, LoginRequiredMixin):
 
     model = StatusMessage
     template_name = 'mini_fb/delete_status_form.html'
@@ -115,12 +127,34 @@ class DeleteStatusMessageView(DeleteView):
         profile_id = self.object.profile.pk
         return reverse('show_profile', kwargs={'pk': profile_id})
     
-class UpdateStatusMessageView(UpdateView, LoginRequiredMixin):
+    def get_context_data(self, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+
+        # getting the profile associated with the logged-in user, if it exists
+        if self.request.user.is_authenticated:
+            context['user_profile'] = Profile.objects.filter(user_key=self.request.user).first()
+        else:
+            context['user_profile'] = None
+        
+        return context
+    
+class UpdateStatusMessageView(LoginRequiredMixin, UpdateView):
 
     model = StatusMessage
     form_class = UpdateMessageForm
     template_name = 'mini_fb/update_status_form.html'
     context_object_name = 'status_message'
+
+    def get_object(self, queryset = None):
+        # Get the status message object
+        status_message = super().get_object(queryset)
+        
+        # Check if the logged-in user is the owner of the status message
+        if status_message.profile.user_key != self.request.user:
+            raise PermissionDenied("You do not have permission to edit this status message.")
+        
+        return status_message
 
     def get_success_url(self):
         profile_id = self.object.profile.pk
@@ -137,6 +171,12 @@ class AddStatusMessageImages(UpdateView, LoginRequiredMixin):
         context = super().get_context_data(**kwargs)
         context['status_message'] = self.object
 
+        # getting the profile associated with the logged-in user, if it exists
+        if self.request.user.is_authenticated:
+            context['user_profile'] = Profile.objects.filter(user_key=self.request.user).first()
+        else:
+            context['user_profile'] = None
+        
         return context
     
     def form_valid(self, form):
@@ -168,6 +208,12 @@ class DeleteStatusMessageImagesView(DeleteView, LoginRequiredMixin):
         context = super().get_context_data(**kwargs)
         context['status_message'] = self.object
 
+        # getting the profile associated with the logged-in user, if it exists
+        if self.request.user.is_authenticated:
+            context['user_profile'] = Profile.objects.filter(user_key=self.request.user).first()
+        else:
+            context['user_profile'] = None
+        
         return context
 
     def get_success_url(self):
@@ -182,6 +228,13 @@ class DeleteStatusMessageImageView(DeleteView, LoginRequiredMixin):
         context = super().get_context_data(**kwargs)
         context['image'] = self.object  
         context['status_message'] = self.object.status_message
+
+        # getting the profile associated with the logged-in user, if it exists
+        if self.request.user.is_authenticated:
+            context['user_profile'] = Profile.objects.filter(user_key=self.request.user).first()
+        else:
+            context['user_profile'] = None
+        
         return context
 
     def get_success_url(self):
@@ -191,17 +244,14 @@ class DeleteStatusMessageImageView(DeleteView, LoginRequiredMixin):
 class CreateFriendView(View, LoginRequiredMixin):
 
     def dispatch(self, request, *args, **kwargs):
-
-        pk = self.kwargs['pk']
+        user_profile = get_object_or_404(Profile, user_key=request.user)
+        
         other_pk = self.kwargs['other_pk']
+        other_profile = get_object_or_404(Profile, pk=other_pk)
 
-        profile = list(Profile.objects.filter(pk = pk))[0]
-        other_profile = list(Profile.objects.filter(pk = other_pk))[0]
+        user_profile.add_friend(other_profile)
 
-        profile.add_friend(other_profile)
-
-        # Redirect back to the profile page of the current user
-        return redirect('show_profile', pk=pk)
+        return redirect('show_profile', pk=user_profile.pk)
     
 class ShowFriendSuggestionsView(DetailView, LoginRequiredMixin):
 
@@ -210,7 +260,7 @@ class ShowFriendSuggestionsView(DetailView, LoginRequiredMixin):
     context_object_name = 'profile'
 
     def get_success_url(self):
-        return reverse('profile', kwargs={'pk': self.object.pk})
+        return reverse('see_suggestions')
     
     def get_context_data(self, **kwargs):
         ''' override to have friends in groups of 5 '''
@@ -222,8 +272,14 @@ class ShowFriendSuggestionsView(DetailView, LoginRequiredMixin):
         # grouping friends into rows of 5
         friends_in_rows = [friend_suggestions[i:i + 5] for i in range(0, len(friend_suggestions), 5)]
         context['friends_in_rows'] = friends_in_rows
+
+        context['user_profile'] = profile
         
         return context
+    
+    def get_object(self):
+        """ overrrided to get the Profile object for the logged-in user """
+        return get_object_or_404(Profile, user_key=self.request.user)
     
 class ShowNewsFeedView(DetailView, LoginRequiredMixin):
 
@@ -231,9 +287,11 @@ class ShowNewsFeedView(DetailView, LoginRequiredMixin):
     model = Profile
     context_object_name = 'profile'
 
-    
-def show_main(request):
-    """ renders main.html with general info """
+    def get_object(self, queryset=None):
+        """ retrieving the profile associated with the logged-in user """
+        return get_object_or_404(Profile, user_key=self.request.user)
 
-    # rednering the main.html template
-    return render(request, 'mini_fb/main.html')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_profile'] = self.get_object()
+        return context

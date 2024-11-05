@@ -1,0 +1,12 @@
+{% extends 'mini_fb/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<h1> You Successfully Logged out! </h1>
+<a href="{% url 'login' %}">Log Back In</a>
+<br>
+<a href="{% url 'show_all' %}">Home Page</a>
+
+{% endblock %}

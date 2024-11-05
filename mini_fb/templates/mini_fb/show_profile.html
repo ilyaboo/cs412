@@ -29,28 +29,81 @@
 
         {% if request.user.is_authenticated and request.user == profile.user_key %}
             <div style="margin-bottom: 20px;">
-                <a href="{% url 'update_profile' profile.pk %}" style="display: block; margin: 20px 0px; padding: 10px 50px; background-color: #008f68; color: white; text-decoration: none; border-radius: 5px; text-align: center;">Update Profile</a>
+                <a href="{% url 'update_profile'%}" style="display: block; margin: 20px 0px; padding: 10px 50px; background-color: #008f68; color: white; text-decoration: none; border-radius: 5px; text-align: center;">Update Profile</a>
             </div>
             
             <div style="margin-bottom: 20px;">
-                <a href="{% url 'create_status' profile.pk %}" style="display: block; margin: 20px 0px; padding: 10px 50px; background-color: #008f68; color: white; text-decoration: none; border-radius: 5px; text-align: center;">Post a Status</a>
+                <a href="{% url 'create_status' %}" style="display: block; margin: 20px 0px; padding: 10px 50px; background-color: #008f68; color: white; text-decoration: none; border-radius: 5px; text-align: center;">Post a Status</a>
             </div>
 
             <div style="margin-bottom: 20px;">
-                <a href="{% url 'see_suggestions' profile.pk %}" style="display: block; margin: 20px 0px; padding: 10px 50px; background-color: #008f68; color: white; text-decoration: none; border-radius: 5px; text-align: center;">Friend Suggestions</a>
+                <a href="{% url 'see_suggestions' %}" style="display: block; margin: 20px 0px; padding: 10px 50px; background-color: #008f68; color: white; text-decoration: none; border-radius: 5px; text-align: center;">Friend Suggestions</a>
             </div>
 
             <div style="margin-bottom: 20px;">
-                <a href="{% url 'see_news' profile.pk %}" style="display: block; margin: 20px 0px; padding: 10px 50px; background-color: #008f68; color: white; text-decoration: none; border-radius: 5px; text-align: center;">News Feed</a>
+                <a href="{% url 'see_news'%}" style="display: block; margin: 20px 0px; padding: 10px 50px; background-color: #008f68; color: white; text-decoration: none; border-radius: 5px; text-align: center;">News Feed</a>
             </div>
         {% endif %}
 
         <h3>Status Messages</h3>
+        {% if request.user.is_authenticated and request.user == profile.user_key %}
+            <table border="1" cellpadding="10" cellspacing="0" 
+                style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+                <thead>
+                    <tr>
+                        <th style="width: 90px; "> Modify </th>
+                        <th style="width: 90px;">Date Posted</th>
+                        <th>Message</th>
+                        <th> Images </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for message in profile.get_status_messages %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'update_message' message.pk %}" 
+                                style="display: inline-block; background-color: #00a67c; color: white; 
+                                        text-decoration: none; padding: 7px 13px; font-size: 0.8em; 
+                                        border-radius: 10px; transition: background-color 0.3s ease; 
+                                        cursor: pointer; margin: 5px;"
+                                onmouseover="this.style.backgroundColor='#008f68';"
+                                onmouseout="this.style.backgroundColor='#00a67c';">
+                                    modify
+                                </a>
+                                <a href="{% url 'delete_message' message.pk %}" 
+                                style="display: inline-block; background-color: #d9534f; color: white; 
+                                        text-decoration: none; padding: 7px 13px; font-size: 0.8em; 
+                                        border-radius: 10px; transition: background-color 0.3s ease; 
+                                        cursor: pointer; margin: 5px;"
+                                onmouseover="this.style.backgroundColor='#c9302c';"
+                                onmouseout="this.style.backgroundColor='#d9534f';">
+                                    delete
+                                </a>
+                            </td>
+                            <td>{{ message.timestamp|date:"F j, Y, g:i a" }}</td>
+                            <td>{{ message.message }}</td>
+                            <td>
+                                {% for img in message.get_images %}
+                                <img src="{{ img.image.url }}" alt="{{ img.image.name }}" 
+                                style="padding-bottom: 10px; max-width: 300px; height: auto;">
+                                    <br>
+                                {% endfor %}
+
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="4">No status messages yet.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+
         <table border="1" cellpadding="10" cellspacing="0" 
-            style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+        style="width: 100%; border-collapse: collapse; table-layout: fixed;">
             <thead>
                 <tr>
-                    <th style="width: 90px; "> Modify </th>
                     <th style="width: 90px;">Date Posted</th>
                     <th>Message</th>
                     <th> Images </th>
@@ -59,26 +112,7 @@
             <tbody>
                 {% for message in profile.get_status_messages %}
                     <tr>
-                        <td>
-                            <a href="{% url 'update_message' message.pk %}" 
-                               style="display: inline-block; background-color: #00a67c; color: white; 
-                                      text-decoration: none; padding: 7px 13px; font-size: 0.8em; 
-                                      border-radius: 10px; transition: background-color 0.3s ease; 
-                                      cursor: pointer; margin: 5px;"
-                               onmouseover="this.style.backgroundColor='#008f68';"
-                               onmouseout="this.style.backgroundColor='#00a67c';">
-                                modify
-                            </a>
-                            <a href="{% url 'delete_message' message.pk %}" 
-                               style="display: inline-block; background-color: #d9534f; color: white; 
-                                      text-decoration: none; padding: 7px 13px; font-size: 0.8em; 
-                                      border-radius: 10px; transition: background-color 0.3s ease; 
-                                      cursor: pointer; margin: 5px;"
-                               onmouseover="this.style.backgroundColor='#c9302c';"
-                               onmouseout="this.style.backgroundColor='#d9534f';">
-                                delete
-                            </a>
-                        </td>
+                        
                         <td>{{ message.timestamp|date:"F j, Y, g:i a" }}</td>
                         <td>{{ message.message }}</td>
                         <td>
@@ -92,12 +126,12 @@
                     </tr>
                 {% empty %}
                     <tr>
-                        <td colspan="4">No status messages yet.</td>
+                        <td colspan="3">No status messages yet.</td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
-
+    {% endif %}
 
         <h3>{{ profile.first_name }}'s Friends</h3>
         <table border="1" cellpadding="10" cellspacing="0" 
