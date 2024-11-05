@@ -15,12 +15,16 @@
     <form method="POST">
         {% csrf_token %}
         
+        {{ user_creation_form.as_p }}
+
         {{ form.as_p }}
         
         <!-- Submit button -->
         <input type="submit" value="Submit">
     </form>
     <!-- End form -->
+
+    
 </body>
 
 {% endblock %}

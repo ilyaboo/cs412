@@ -16,7 +16,7 @@
             <nav>
                 <!-- URLs that do not depend on authentication status -->
                 <a href="{% url 'show_all' %}">Home</a>
-                <a href="{% url 'create_profile' %}">Register</a>
+                
 
                 <!-- URLs that depend on authentication status -->
                 {% if request.user.is_authenticated %}
@@ -33,13 +33,14 @@
                     </form>
                 {% else %}
                     <a href="{% url 'login' %}">Log in</a>
+                    <a href="{% url 'create_profile' %}">Register</a>
                 {% endif %}
 
 
                 {% if request.user.is_authenticated %}
-                    Logged in user: {{ request.user }}.
+                    <br><br>Logged in user: <br> {{ request.user }}.
                 {% else %}
-                    Not logged in.
+                    <br><br>Not logged in.
                 {% endif %}
                 
             </nav>

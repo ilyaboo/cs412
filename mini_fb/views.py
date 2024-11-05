@@ -6,6 +6,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login
 from django.core.exceptions import PermissionDenied
+from django.contrib.auth.forms import UserCreationForm
 
 
 
@@ -62,6 +63,25 @@ class CreateProfileView(CreateView):
     model = Profile
     form_class = CreateProfileForm
     template_name = 'mini_fb/create_profile_form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["user_creation_form"] = UserCreationForm()
+
+        return context
+    
+    def form_valid(self, form):
+        user_creation_form = UserCreationForm(self.request.POST)
+
+        # saving the UserCreationForm to create a new User
+        user = user_creation_form.save()
+
+        # attaching the user to the Profile instance
+        form.instance.user_key = user
+
+        # proceeding with saving the Profile by calling the superclass method
+        return super().form_valid(form)
+
 
 class CreateStatusMessageView(LoginRequiredMixin, CreateView):
     
