@@ -10,7 +10,7 @@ class Voter(models.Model):
     street_number = models.IntegerField()
     street_name = models.TextField()
     apartment_number = models.TextField()
-    zip_code = models.IntegerField()
+    zip_code = models.TextField()
     date_of_birth = models.DateField()
 
     # voter information

@@ -1,0 +1,118 @@
+{% extends 'voter_analytics/base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <h1> Voter's Record</h1>
+
+    <div class="row">
+        <table>
+            <tr>
+                <td>
+                    Name
+                </td>
+                <td>
+                    {{voter.first_name}} {{voter.last_name}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Address
+                </td>
+                <td>
+                    {% if voter.apartment_number %}
+                        {{voter.street_number}} {{voter.street_name}}, apartment {{ voter.apartment_number }}; {{ voter.zip_code }}
+                    {% else %}
+                        {{voter.street_number}} {{voter.street_name}}; {{voter.zip_code }}
+                    {% endif %}
+                    <br>
+                    <a href="https://www.google.com/maps/search/?api=1&query={{ voter.street_number }}+{{ voter.street_name }}+Newton+MA+{{ voter.zip_code }}" target="_blank">
+                        Open in Google Maps
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Date of Birth
+                </td>
+                <td>
+                    {{ voter.date_of_birth }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Date of Registration
+                </td>
+                <td>
+                    {{ voter.date_of_registration }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Party Affiliation
+                </td>
+                <td>
+                    {{ voter.party_affiliation }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Precinct Number
+                </td>
+                <td>
+                    {{ voter.precinct_number }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Voted in 2020 State Elections?
+                </td>
+                <td>
+                    {{ voter.v20state }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Voted in 2021 Town Elections?
+                </td>
+                <td>
+                    {{ voter.v21town }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Voted in 2021 Primary Elections?
+                </td>
+                <td>
+                    {{ voter.v21primary }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Voted in 2022 General Elections?
+                </td>
+                <td>
+                    {{ voter.v22general }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Voted in 2023 Town Elections?
+                </td>
+                <td>
+                    {{ voter.v23town }}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Voter Score
+                </td>
+                <td>
+                    {{ voter.voter_score }}
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+    
+{% endblock %}

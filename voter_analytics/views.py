@@ -1,11 +1,11 @@
 from django.db.models.query import QuerySet
 from django.shortcuts import render
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from . models import Voter
 from django.utils.dateparse import parse_date
 
 class VotersListView(ListView):
-    ''' view to display marathon results '''
+    ''' view to display voters data '''
 
     template_name = 'voter_analytics/voters.html'
     model = Voter
@@ -74,3 +74,10 @@ class VotersListView(ListView):
         context['query_params'] = query_params.urlencode()
 
         return context
+    
+class VoterDetailView(DetailView):
+    ''' view to display a voter '''
+
+    template_name = 'voter_analytics/voter_profile.html'
+    model = Voter
+    context_object_name = 'voter'
