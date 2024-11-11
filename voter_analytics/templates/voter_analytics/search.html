@@ -1,0 +1,103 @@
+<h3>Search Form</h3>
+<table>
+    <form action="{% url 'results_list' %}">
+
+        <!-- Party Affiliation Selection -->
+        <tr>
+            <th>Party Affiliation:</th>
+            <td>
+                <select name="party_affiliation_search">
+                    <option value="">Not Selected</option>
+                    {% for party in unique_parties %}
+                        <option value="{{ party }}">{{ party }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+
+        <!-- Years of Birth Range -->
+        <tr>
+            <th>Minimum Year of Birth:</th>
+            <td>
+                <select name="min_yob">
+                    <option value="">Not Selected</option>
+                    {% for y in years %}
+                        <option value={{y}}>{{y}}</option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <th>Maximum Year of Birth:</th>
+            <td>
+                <select name="max_yob">
+                    <option value="">Not Selected</option>
+                    {% for y in years %}
+                        <option value={{y}}>{{y}}</option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+
+        <!-- Voter Score Selection -->
+        <tr>
+            <th>Voter Score:</th>
+            <td>
+                <select name="voter_score_search">
+                    <option value="">Not Selected</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </td>
+        </tr>
+
+        <!-- Election Checkboxes -->
+        <tr>
+            <th>Participated in Specific Elections:</th>
+            <td>
+                <label><input type="checkbox" name="2020_state" > 2020 State</label><br>
+                <label><input type="checkbox" name="2021_town"> 2021 Town</label><br>
+                <label><input type="checkbox" name="2021_primary"> 2021 Primary</label><br>
+                <label><input type="checkbox" name="2022_general"> 2022 General</label><br>
+                <label><input type="checkbox" name="2023_town"> 2023 Town</label><br>
+            </td>
+        </tr>
+        
+        <tr>
+            <td colspan="2"><input type="submit"></td>  
+        </tr>
+        
+    </form>
+
+    <!-- Pagination Links -->
+    <td colspan="2">
+        {% if is_paginated %}
+            <div class="pagination">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1&{{ query_params }}">First</a>
+                        <a href="?page={{ page_obj.previous_page_number }}&{{ query_params }}">Previous</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}&{{ query_params }}">Next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}&{{ query_params }}">Last</a>
+                    {% endif %}
+                </span>
+            </div>
+        {% endif %}
+
+
+    </td>
+</table>
+
+

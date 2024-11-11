@@ -1,0 +1,269 @@
+body {
+    background-color: #013220;
+    color: #f0f0f0;
+    font-family: 'Georgia', serif;
+}
+
+h1, h2, h3 {
+    color: #e0e4e1;
+    font-family: 'Garamond', serif;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+h1 {
+    font-size: 3em;
+}
+
+h2 {
+    font-size: 2.5em;
+}
+
+h3 {
+    font-size: 2em;
+}
+
+p {
+    font-family: 'Times New Roman', serif;
+    font-size: 1.2em;
+    line-height: 1.6;
+    margin: 20px;
+    color: #f0f0f0;
+}
+
+a {
+    color: #99f0c2;
+    font-weight: bold;
+}
+
+a:hover {
+    color: #008f68;
+    text-decoration: underline;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    color: #f0f0f0;
+}
+
+th, td {
+    border: 1px solid #00a67c;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+td {
+    background-color: #025a3f;
+}
+
+th {
+    background-color: #014f38;
+}
+
+body, h1, h2, h3, p, a, table {
+    margin: 10px 0px;
+    padding: 10px 0px;
+}
+
+form {
+    text-align: left;
+    background-color: #014f38;
+    border-radius: 10px;
+    padding: 10px 60px;
+    width: 80%;
+    margin: 0 auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+label {
+    font-family: 'Garamond', serif;
+    font-size: 1.1em;
+    margin-bottom: 5px;
+    color: #e0e4e1;
+}
+
+input[type = "text"], input[type = "tel"], input[type = "email"], select, textarea {
+    height: 50px;
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #00a67c;
+    border-radius: 10px;
+    background-color: #013220;
+    color: #f0f0f0;
+    font-family: 'Times New Roman', serif;
+    font-size: 1.0em;
+    cursor: pointer;
+}
+
+input[type = "text"]:focus, select:focus, textarea:focus {
+    border-color: #99f0c2;
+    outline: none;
+}
+
+input[type = "radio"], input[type = "checkbox"] {
+    transform: scale(1.3);
+    cursor: pointer;
+    margin: 10px 0px;
+}
+
+input[type = "radio"]:checked, input[type = "checkbox"]:checked {
+    accent-color: #00a67c;
+}
+
+input[type = "submit"] {
+    background-color: #00a67c;
+    color: #f0f0f0;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+input[type = "submit"]:hover {
+    background-color: #008f68;
+}
+
+.grid-container {
+    max-width: 1600;
+    display: grid;  
+    grid-template-columns: 1fr 4fr 1fr;
+    column-gap: 3px;
+    margin: 20px auto;
+}
+
+header { 
+    grid-column: span 6;
+    text-align: center;
+    border-bottom: 1px solid #008f68;
+}
+
+nav {
+    padding: 10px 10px;
+    align-items: top;
+    text-align: center;
+}
+
+nav a {
+    display: block;
+    margin: 20px 0px;
+    padding: 10px 50px;
+    background-color: #008f68;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+nav a:hover {
+    background-color: #006f53;
+}
+
+aside {
+    padding: 10px 10px;
+    align-items: top;
+    text-align: center;
+}
+
+img {
+    width: 95%;
+    height: auto;
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+}
+
+main {
+    padding: 10px 10px;
+    align-items: top;
+    text-align: center;
+    border-right: 1px solid #008f68;
+    border-bottom: 1px solid #008f68;
+    border-left: 1px solid #008f68;
+}
+
+
+footer {
+    padding: 10px 10px;
+}
+
+input[type="text"], input[type="email"], input[type="url"] {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #00a67c;
+    border-radius: 10px;
+    background-color: #013220;
+    color: #f0f0f0;
+    font-family: 'Times New Roman', serif;
+    font-size: 1.0em;
+    cursor: pointer;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="url"]:focus {
+    border-color: #99f0c2;
+    outline: none;
+}
+
+input[type="file"] {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0 10px;
+    border: 2px solid #00a67c;
+    border-radius: 10px;
+    background-color: #013220;
+    color: #f0f0f0;
+    font-family: 'Times New Roman', serif;
+    font-size: 1em;
+    cursor: pointer;
+    margin-top: 10px;
+    box-sizing: border-box;
+}
+
+input[type="file"]::file-selector-button {
+    height: 100%;
+    background-color: #00a67c;
+    color: #f0f0f0;
+    border: none;
+    padding: 0 20px;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    box-sizing: border-box;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background-color: #008f68;
+}
+
+/* Add space below the input */
+input[type="file"] + input[type="submit"] {
+    margin-top: 20px;
+}
+
+/* Style for buttons to look like links */
+.link-style-button {
+    color: #99f0c2;            /* Link color */
+    font-weight: bold;         /* Match font weight of links */
+    background: none;          /* Remove button background */
+    border: none;              /* Remove button border */
+    text-decoration: none;     /* Remove underline */
+    cursor: pointer;           /* Pointer cursor on hover */
+    padding: 0;                /* Remove padding to match link appearance */
+}
+
+.link-style-button:hover {
+    color: #008f68;            /* Match hover color of links */
+    text-decoration: underline; /* Add underline on hover */
+}

@@ -1,6 +1,7 @@
 from django.urls import path
-from django.conf import settings
 from . import views
 
 urlpatterns = [
+    path('', views.VotersListView.as_view(), name = 'voters'),
+    path('results', views.VotersListView.as_view(), name='results_list'),    
 ]
