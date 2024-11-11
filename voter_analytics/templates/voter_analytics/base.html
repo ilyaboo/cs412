@@ -1,21 +1,28 @@
-{% load static %}
 <html>
     <head>
+        {% load static %}
         <title>Voter Analytics</title>
-        <link rel="stylesheet" href="{% static 'styles.css' %}">
+        <link rel="stylesheet" href="{% static 'styles_vote.css' %}?v=1.92">
     </head>
     <body>
-        <header>
-            <h1>Voter Analytics</h1>
-            <nav>
-                <ul>
-                    <li><a href="{% url 'voters' %}">All Voters</a></li>
-                </ul>
-            </nav>
-        </header>
-    
+        <h1> Voter Analytics </h1>
+        <nav>
+            <table style="width: 100%; table-layout: fixed;">
+                <tr>
+                    <td style="width: 50%; text-align: center;">
+                        <ul>
+                            <a href="{% url 'voters' %}">All Voters</a>
+                        </ul>
+                    </td>
+                    <td style="width: 50%; text-align: center;">
+                        <ul>
+                            <a href="{% url 'graphs' %}">Graphs</a>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        </nav>
     {% block content %}
     {% endblock %}    
-  
     </body>
 </html>
