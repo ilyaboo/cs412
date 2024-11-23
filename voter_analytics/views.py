@@ -106,7 +106,6 @@ class GraphsView(ListView):
 
         # filter by minimum year of birth
         min_yob = self.request.GET.get('min_yob')
-        print(min_yob)
         if min_yob:
             qs = qs.filter(date_of_birth__year__gte=int(min_yob))
 

@@ -1,0 +1,22 @@
+{% load static %}
+<head>
+    <title>Investment Tracker</title>
+</head>
+<body>
+    <header>
+        <h1>Investment Tracker</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="{% url 'user_list' %}">Users</a></li>
+            <li><a href="{% url 'investment_list' %}">Investments</a></li>
+        </ul>
+    </nav>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer>
+        <p>&copy; 2024 Investment Tracker</p>
+    </footer>
+</body>

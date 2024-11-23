@@ -1,0 +1,21 @@
+{% extends 'investment_tracker/base.html' %}
+
+{% block content %}
+<h2>Portfolio: {{ portfolio.name }}</h2>
+<p>Owner: {{ portfolio.user.username }}</p>
+<p>Created on: {{ portfolio.created_at }}</p>
+
+<h3>Investments in Portfolio</h3>
+<ul>
+    {% for investment in portfolio.investments.all %}
+        <li>
+            {{ investment.name }} - {{ investment.type }}: ${{ investment.purchase_price }} 
+            x {{ investment.quantity }} shares
+        </li>
+    {% empty %}
+        <li>No investments in this portfolio.</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'investment_list' %}">View All Investments</a>
+{% endblock %}
