@@ -1,0 +1,12 @@
+{% extends 'investment_tracker/base.html' %}
+
+{% block content %}
+
+    <h1> {{ profile.first_name }}'s Portfolios </h1>
+
+    {% for portfolio in user_portfolios %}
+        <p> {{portfolio.portfolio_name}} </p>
+        <br>
+    {% endfor %}
+
+{% endblock %}

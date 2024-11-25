@@ -1,7 +1,6 @@
 from django.contrib import admin
-from .models import User, Investment, Portfolio, HistoricalData
+from .models import Profile, Portfolio, PurchasedAsset
 
-admin.site.register(User)
-admin.site.register(Investment)
+admin.site.register(Profile)
 admin.site.register(Portfolio)
-admin.site.register(HistoricalData)
+admin.site.register(PurchasedAsset)

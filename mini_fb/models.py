@@ -11,7 +11,7 @@ class Profile(models.Model):
     city = models.TextField(blank = False)
     email_address = models.TextField(blank = False)
     profile_img_url = models.TextField(blank = False)
-    user_key = models.ForeignKey(User, on_delete = models.CASCADE)
+    user_key = models.ForeignKey(User, on_delete = models.CASCADE, related_name='mini_fb_profiles')
 
 
     def __str__(self):

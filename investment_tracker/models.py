@@ -1,36 +1,40 @@
 from django.db import models
+from django.contrib.auth.models import User
 
-class User(models.Model):
-    username = models.CharField(max_length=100)
-    email = models.EmailField()
+class Profile(models.Model):
+    """ extended version of the built-in User model """
+
+    user = models.OneToOneField(User, on_delete = models.CASCADE, related_name = "investment_tracker_profiles")
+    first_name = models.CharField(max_length = 50)
+    last_name = models.CharField(max_length = 50)
+
+    def __str__(self):
+        """ srting representation of a Profile object """
+
+        return f'{self.user.username}'
     
-    def __str__(self):
-        return self.username
-
-class Investment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=200)  # "AAPL", "Bitcoin"
-    type = models.CharField(max_length=100)  # "Stock", "Crypto"
-    purchase_date = models.DateField()
-    purchase_price = models.DecimalField(max_digits=10, decimal_places=2)
-    quantity = models.DecimalField(max_digits=10, decimal_places=2)
-
-    def __str__(self):
-        return f"{self.name} ({self.type})"
-
 class Portfolio(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=200)
-    created_at = models.DateTimeField(auto_now_add=True)
-    investments = models.ManyToManyField(Investment, related_name="portfolios")
+    """ a model which corresponds to a user created portfolio of assets """
+
+    portfolio_name = models.CharField(max_length = 100, default = "My Portfolio")
+    portfolio_creation_time = models.DateTimeField(auto_now_add = True)
+    portfolio_owner = models.ForeignKey(Profile, on_delete = models.CASCADE)
 
     def __str__(self):
-        return f"{self.name} - {self.user.username}"
+        """ string representation of a Portfolio object """
 
-class HistoricalData(models.Model):
-    investment = models.ForeignKey(Investment, on_delete=models.CASCADE)
-    date = models.DateField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+        return f'{self.portfolio_name} ({self.portfolio_owner.first_name}\'s portfolio created at {self.portfolio_creation_time})'
+    
+class PurchasedAsset(models.Model):
+    """ a model that corresponds to an asset purchased (added) to the portfolio """
+
+    portfolio = models.ForeignKey(Portfolio, on_delete = models.CASCADE)
+    asset_name = models.CharField(max_length = 100)
+    purchase_time = models.DateTimeField(auto_now_add = True)
+    purchase_price = models.DecimalField(max_digits = 10, decimal_places = 2)
+    purchase_quantity = models.DecimalField(max_digits = 10, decimal_places = 4)
 
     def __str__(self):
-        return f"{self.investment.name} - {self.date}"
+        """ string representation of the PurchasedAsset object """
+
+        return f'{self.purchase_quantity} of {self.asset_name} purchased at the price of {self.purchase_price} for {self.portfolio.portfolio_name} by {self.portfolio.portfolio_owner.first_name}'

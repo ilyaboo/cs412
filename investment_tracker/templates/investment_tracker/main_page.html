@@ -1,0 +1,14 @@
+{% extends 'investment_tracker/base.html' %}
+
+{% block content %}
+
+    <body>
+        <h2>All Profiles</h2>
+
+        {% for profile in profiles %}
+            <p> {{profile.first_name}} </p>
+            <br>
+        {% endfor %}
+    </body>
+
+{% endblock %}

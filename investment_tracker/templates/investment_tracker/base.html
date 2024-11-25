@@ -1,22 +1,42 @@
 {% load static %}
-<head>
-    <title>Investment Tracker</title>
-</head>
-<body>
-    <header>
-        <h1>Investment Tracker</h1>
-    </header>
-    <nav>
-        <ul>
-            <li><a href="{% url 'user_list' %}">Users</a></li>
-            <li><a href="{% url 'investment_list' %}">Investments</a></li>
-        </ul>
-    </nav>
-    <main>
-        {% block content %}
-        {% endblock %}
-    </main>
-    <footer>
-        <p>&copy; 2024 Investment Tracker</p>
-    </footer>
-</body>
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+        <meta name = "viewport" content = "width=device-width, initial-scale = 1.0">
+        <title> Investment Tracker </title>
+        <link rel = "stylesheet" href = "{% static 'styles_a.css' %}">
+    </head>
+
+    <body>
+        <header>
+            <div>
+                <h1> <a href="{% url 'main_page' %}"> Investment Tracker </a> </h1>
+            </div>
+            <nav>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'my_portfolios' %}"> My Portfolios </a>
+                    <a href="{% url 'my_profile' %}"> My Profile </a>
+                    <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="logout-button">Logout</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}"> Login </a>
+                {% endif %}
+            </nav>
+        </header>
+
+        <main>
+            {% block content %}
+                
+            {% endblock %}
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Investment Tracker </p>
+        </footer>
+    </body>
+</html>
