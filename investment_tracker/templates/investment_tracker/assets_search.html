@@ -1,0 +1,13 @@
+<div>
+    <h2> Asset Search </h2>
+    <form method = "get" action = "{% url 'all_assets' %}">
+        <input type = "hidden" name = "from_portfolio" value = "true">
+        <label for = "asset_type"> Choose Asset Type: </label>
+        <select name = "asset_type" id = "asset_type">
+            <option value = "" disabled selected> Not Specified </option>
+            <option value = "stock"> Stocks </option>
+            <option value = "crypto"> Cryptocurrencies </option>
+        </select>
+        <button type = "submit"> Search </button>
+    </form>
+</div>

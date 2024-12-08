@@ -1,0 +1,42 @@
+{% extends 'investment_tracker/base.html' %}
+
+{% block content %}
+
+    <h1>Create Portfolio</h1>
+    <form method="post" action="">
+        {% csrf_token %}
+        <label for="portfolio_name">Portfolio Name:</label>
+        <input type="text" name="portfolio_name" id="portfolio_name" required>
+        <button type="submit">Create Portfolio</button>
+    </form>
+
+    <form method = "post" action = "{% url 'clear_draft_assets' %}">
+        {% csrf_token %}
+        <button type = "submit"> Clear Draft Assets </button>
+    </form>
+    <a href="{% url 'all_assets' %}?from_portfolio=true">Add Asset</a>
+
+    <h2>Draft Assets</h2>
+    <table width = "100%">
+        <tr>
+            <th>Ticker</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+            <th>Action</th>
+        </tr>
+        {% for asset in draft_assets %}
+        <tr>
+            <td>{{ asset.ticker }}</td>
+            <td>{{ asset.quantity }}</td>
+            <td>{{ asset.price }}</td>
+            <td>{{ asset.total_cost }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <p>Total Cost: {{ total_cost }}</p>
+
+    
+
+{% endblock %}

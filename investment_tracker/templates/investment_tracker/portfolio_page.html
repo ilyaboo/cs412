@@ -1,0 +1,35 @@
+{% extends 'investment_tracker/base.html' %}
+
+{% block content %}
+
+    <h1> {{ portfolio.portfolio_name }} </h1>
+    <p> Created by {{ portfolio.portfolio_owner.first_name }} at {{ portfolio.portfolio_creation_time }}</p>
+
+    <table style = "width: 100%">
+
+        <tr>
+            <th> Ticker </th>
+            <th> Name </th>
+            <th> Asset Type </th>
+            <th> Purchase Date </th>
+            <th> Purchase Price in $ </th>
+            <th> Current Price in $ </th>
+            <th> Quantity Purchased </th>
+            <th> Vakue Change in $ </th>
+        </tr>
+
+        {% for portfolio_asset in portfolio_assets %}
+            <tr>
+                <td> <a href = "{% url 'asset_info' portfolio_asset.asset.ticker %}"> {{ portfolio_asset.asset.ticker }} </a> </td>
+                <td> {{ portfolio_asset.asset.name }} </td>
+                <td> {{ portfolio_asset.asset.asset_type }} </td>
+                <td> {{ portfolio_asset.purchase_time }} </td>
+                <td> {{ portfolio_asset.purchase_price|floatformat:2 }} </td>
+                <td> {{ portfolio_asset.asset.get_current_price|floatformat:2 }} </td>
+                <td> {{ portfolio_asset.get_formatted_purchase_quantity }} </td>                
+            </tr>
+        {% endfor %}
+
+    </table>
+
+{% endblock %}

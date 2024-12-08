@@ -1,4 +1,15 @@
 /* base styles */
+
+/* positive (green) */
+.positive {
+    color: #28B463;
+}
+
+/* negative (red) */
+.negative {
+    color: #E74C3C;
+}
+
 body {
     background-color: #0B3D2E;
     color: #EAECEE;

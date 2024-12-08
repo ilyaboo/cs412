@@ -4,9 +4,29 @@
 
     <h1> {{ profile.first_name }}'s Portfolios </h1>
 
-    {% for portfolio in user_portfolios %}
-        <p> {{portfolio.portfolio_name}} </p>
-        <br>
-    {% endfor %}
+    <table style = "width: 100%">
+
+        <tr>
+            <th> Portfolio Name </th>
+            <th> Money Invested in $ </th>
+            <th> Current Price in $ </th>
+        </tr>
+
+        {% for portfolio in user_portfolios %}
+            <tr>
+                <td> <a href = "{% url 'portfolio' portfolio.slug %}"> {{portfolio.portfolio_name}} </a> </td>
+                <td> {{ portfolio.get_money_invested_in_portfolio|floatformat:2  }} </td>
+                <td> {{ portfolio.get_current_portfolio_value|floatformat:2  }} </td>
+                <td>
+                    <td>
+                        <span class="{% if portfolio.get_portfolio_value_change|slice:":1" == "+" %}positive{% elif portfolio.get_portfolio_value_change|slice:":1" == "-" %}negative{% endif %}">
+                            {{ portfolio.get_portfolio_value_change }}
+                        </span>
+                    </td>
+                </td>
+            </tr>
+        {% endfor %}
+
+    </table>
 
 {% endblock %}
