@@ -15,6 +15,15 @@
         <label for = "ticker"> Search by Ticker: </label>
         <input type = "text" name = "ticker" id = "ticker" placeholder = "Enter asset ticker">
 
+        <label for = "sort_by"> Sort By: </label>
+        <select name = "sort_by" id = "sort_by">
+            <option value = "" disabled selected> Sort Options </option>
+            <option value = "ticker_asc"> Ticker (A-Z) </option>
+            <option value = "ticker_desc"> Ticker (Z-A) </option>
+            <option value = "name_asc"> Name (A-Z) </option>
+            <option value = "name_desc"> Name (Z-A) </option>
+        </select>
+
         <button type = "submit"> Search </button>
     </form>
 </div>

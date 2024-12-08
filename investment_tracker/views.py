@@ -136,6 +136,19 @@ class AssetsListView(ListView):
         if ticker_search:
             qs = qs.filter(ticker = ticker_search)
 
+        # sorting
+        sort_by = self.request.GET.get("sort_by")
+        if sort_by == "name_asc":
+            qs = qs.order_by("name")
+        elif sort_by == "name_desc":
+            qs = qs.order_by("-name")
+        elif sort_by == "ticker_asc":
+            qs = qs.order_by("ticker")
+        elif sort_by == "ticker_desc":
+            qs = qs.order_by("-ticker")
+        else:
+            qs = qs.order_by("ticker")
+
         return qs
     
     def get_context_data(self, **kwargs):
