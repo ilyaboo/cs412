@@ -174,6 +174,20 @@ class ClearDraftAssetsView(LoginRequiredMixin, View):
         
         # redirecting back to the portfolio creation page
         return redirect("create_portfolio")
+    
+class RemoveDraftAssetView(View):
+    """ view to handle the removal of an asset from the portfolio draft """
+
+    def post(self, request, *args, **kwargs):
+        ticker = kwargs["ticker"]
+
+        # getting the current draft assets from the session
+        draft_assets = request.session.get("draft_assets", [])
+
+        draft_assets = [asset for asset in draft_assets if asset["ticker"] != ticker]
+        request.session["draft_assets"] = draft_assets
+
+        return redirect("create_portfolio")
 
 class CreatedPortfolioView(LoginRequiredMixin, View):
     """ finalizes portfolio creation """

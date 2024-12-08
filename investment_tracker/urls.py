@@ -15,4 +15,5 @@ urlpatterns = [
     path("created_portfolio/", views.CreatedPortfolioView.as_view(), name = "finalize_portfolio"),
     path("clear_draft_assets/", views.ClearDraftAssetsView.as_view(), name = "clear_draft_assets"),
     path("add_to_draft/<str:ticker>/", views.AddToPortfolioDraftView.as_view(), name = "add_to_draft"),
+    path("remove_draft_asset/<str:ticker>/", views.RemoveDraftAssetView.as_view(), name = "remove_draft_asset"),
 ]

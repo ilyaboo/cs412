@@ -31,6 +31,12 @@
             <td>{{ asset.quantity }}</td>
             <td>{{ asset.price }}</td>
             <td>{{ asset.total_cost }}</td>
+            <td>
+                <form method = "post" action = "{% url 'remove_draft_asset' asset.ticker %}">
+                    {% csrf_token %}
+                    <button type = "submit"> Remove </button>
+                </form>
+            </td>
         </tr>
         {% endfor %}
     </table>
