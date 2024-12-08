@@ -126,6 +126,16 @@ class AssetsListView(ListView):
         if asset_type_search:
             qs = qs.filter(asset_type = asset_type_search)
 
+        # filter by name
+        name_search = self.request.GET.get("name")
+        if name_search:
+            qs = qs.filter(name__icontains = name_search)
+
+        # filter by tinker
+        ticker_search = self.request.GET.get("ticker")
+        if ticker_search:
+            qs = qs.filter(ticker = ticker_search)
+
         return qs
     
     def get_context_data(self, **kwargs):
