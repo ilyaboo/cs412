@@ -56,8 +56,30 @@ class PortfolioPageView(DetailView):
     def get_context_data(self, **kwargs):
         """ passing the assets portfolio contains """
 
+        # obtaining prices and changes
         context = super().get_context_data(**kwargs)
-        context["portfolio_assets"] = PurchasedAsset.objects.filter(portfolio = self.object)
+        portfolio_assets_objects = PurchasedAsset.objects.filter(portfolio = self.object)
+        portfolio_assets_with_info = [{"portfolio_asset_object": asset,
+                                       "current_price": asset.asset.get_current_price()} \
+                                        for asset in portfolio_assets_objects]
+        
+        # obtaining changes in value
+        for i in range(len(portfolio_assets_with_info)):
+            current_price = portfolio_assets_with_info[i]["current_price"]
+            portfolio_assets_with_info[i]["current_value"] = current_price * \
+                                                            float(portfolio_assets_with_info[i]["portfolio_asset_object"].purchase_quantity)
+            portfolio_assets_with_info[i]["current_value_change"] = portfolio_assets_with_info[i]["current_value"] - \
+                                                                    float(portfolio_assets_with_info[i]["portfolio_asset_object"].get_initial_value())
+            portfolio_assets_with_info[i]["current_value_change_percentage"] = portfolio_assets_with_info[i]["current_value_change"] / \
+                                                                                float(portfolio_assets_with_info[i]["portfolio_asset_object"].get_initial_value()) * 100
+            if portfolio_assets_with_info[i]["current_value_change"] >= 0:
+                portfolio_assets_with_info[i]["current_value_change"] = "+$" + str(round(portfolio_assets_with_info[i]["current_value_change"], 2))
+                portfolio_assets_with_info[i]["current_value_change_percentage"] = "+" + str(round(portfolio_assets_with_info[i]["current_value_change_percentage"], 2))
+            else:
+                portfolio_assets_with_info[i]["current_value_change"] = "-$" + str(round(portfolio_assets_with_info[i]["current_value_change"], 2))[1 : ]
+                portfolio_assets_with_info[i]["current_value_change_percentage"] = str(round(portfolio_assets_with_info[i]["current_value_change_percentage"], 2))
+
+        context["portfolio_assets_with_info"] = portfolio_assets_with_info
         
         return context
     
@@ -183,7 +205,15 @@ class PortfolioCreateView(LoginRequiredMixin, TemplateView):
 
         context = super().get_context_data(**kwargs)
         draft_assets = self.request.session.get("draft_assets", [])
+
+        # extracting current asset prices
+        for i in range(len(draft_assets)):
+            a_obj = Asset.objects.get(ticker = draft_assets[i]["ticker"])
+            draft_assets[i]["price"] = a_obj.get_current_price()
+            draft_assets[i]["total_cost"] = draft_assets[i]["price"] * draft_assets[i]["quantity"]
+
         context["draft_assets"] = draft_assets
+
         context["total_cost"] = sum([asset["price"] * asset["quantity"] for asset in draft_assets])
         return context
 
@@ -238,7 +268,7 @@ class CreatedPortfolioView(LoginRequiredMixin, View):
             PurchasedAsset.objects.create(
                 portfolio = portfolio,
                 asset = Asset.objects.get(ticker = asset["ticker"]),
-                purchase_price = asset["price"],
+                purchase_price = Asset.objects.get(ticker = asset["ticker"]).get_current_price(),
                 purchase_quantity = asset["quantity"],
             )
 

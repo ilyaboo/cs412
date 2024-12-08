@@ -12,21 +12,32 @@
             <th> Name </th>
             <th> Asset Type </th>
             <th> Purchase Date </th>
+            <th> Quantity Purchased </th>
             <th> Purchase Price in $ </th>
             <th> Current Price in $ </th>
-            <th> Quantity Purchased </th>
             <th> Value Change in $ </th>
+            <th> Value Change in %</th>
         </tr>
 
-        {% for portfolio_asset in portfolio_assets %}
+        {% for portfolio_asset in portfolio_assets_with_info %}
             <tr>
-                <td> <a href = "{% url 'asset_info' portfolio_asset.asset.ticker %}"> {{ portfolio_asset.asset.ticker }} </a> </td>
-                <td> {{ portfolio_asset.asset.name }} </td>
-                <td> {{ portfolio_asset.asset.asset_type }} </td>
-                <td> {{ portfolio_asset.purchase_time }} </td>
-                <td> {{ portfolio_asset.purchase_price|floatformat:2 }} </td>
-                <td> {{ portfolio_asset.asset.get_current_price|floatformat:2 }} </td>
-                <td> {{ portfolio_asset.get_formatted_purchase_quantity }} </td>                
+                <td> <a href = "{% url 'asset_info' portfolio_asset.portfolio_asset_object.asset.ticker %}"> {{ portfolio_asset.portfolio_asset_object.asset.ticker }} </a> </td>
+                <td> {{ portfolio_asset.portfolio_asset_object.asset.name }} </td>
+                <td> {{ portfolio_asset.portfolio_asset_object.asset.asset_type }} </td>
+                <td> {{ portfolio_asset.portfolio_asset_object.purchase_time }} </td>
+                <td> {{ portfolio_asset.portfolio_asset_object.get_formatted_purchase_quantity }} </td>
+                <td> ${{ portfolio_asset.portfolio_asset_object.purchase_price|floatformat:2 }} </td>
+                <td> ${{ portfolio_asset.current_value|floatformat:2 }} </td>
+                <td>
+                    <span class = "{% if portfolio_asset.current_value_change|slice:":1" == "+" %}positive{% elif portfolio_asset.current_value_change|slice:":1" == "-" %}negative{% endif %}">
+                        {{ portfolio_asset.current_value_change }}
+                    </span>
+                </td>
+                <td>
+                    <span class = "{% if portfolio_asset.current_value_change_percentage|slice:":1" == "+" %}positive{% elif portfolio_asset.current_value_change_percentage|slice:":1" == "-" %}negative{% endif %}">
+                        {{ portfolio_asset.current_value_change_percentage }}%
+                    </span>
+                </td>
             </tr>
         {% endfor %}
 

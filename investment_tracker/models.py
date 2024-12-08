@@ -95,6 +95,11 @@ class PurchasedAsset(models.Model):
         """ function that truncates decimals and returns formatted purchase quantity """
 
         return str(self.purchase_quantity).rstrip('0').rstrip('.')
+    
+    def get_initial_value(self) -> float:
+        """ return initial value of the asset when it was purchased """
+
+        return self.purchase_price * self.purchase_quantity
 
 def load_data():
     """ function to load data records from CSV file into Django model instances """
