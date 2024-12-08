@@ -16,9 +16,13 @@
             {% csrf_token %}
             <label for = "quantity"> Quantity: </label>
             <input type = "number" name = "quantity" id = "quantity" value = "1" min = "0.001" step = "0.001" required oninput="updateTotalCost()">
+            
+            <br>
 
             <label for = "total_cost"> Total Cost: </label>
             <input type = "number" name = "total_cost" id = "total_cost" value = "{{ price }}" min = "0.01" step = "0.01" required oninput="updateQuantity()">
+
+            <br>
 
             <button type = "submit"> Add to Portfolio Draft </button>
         </form>

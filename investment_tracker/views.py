@@ -77,9 +77,9 @@ class AssetPageView(DetailView):
         asset = self.object
 
         if asset.asset_type == "stock":
-            context["price"] = get_latest_stock_price(asset.ticker)
+            context["price"] = round(get_latest_stock_price(asset.ticker), 2)
         else:
-            context["price"] = get_latest_crypto_price(asset.ticker)
+            context["price"] = round(get_latest_crypto_price(asset.ticker), 2)
 
         # checking if we are in purchase mode
         context["from_portfolio"] = self.request.GET.get("from_portfolio", "false") == "true"
@@ -103,7 +103,14 @@ class AddToPortfolioDraftView(LoginRequiredMixin, View):
         
         # adding the asset to the draft in the session
         draft_assets = request.session.get("draft_assets", [])
-        draft_assets.append({"ticker": asset.ticker, "name": asset.name, "price": price, "quantity": quantity, "total_cost": total_cost})
+
+        # checking if this asset is already present in the draft
+        if asset.ticker in [val["ticker"] for val in draft_assets]:
+            i = [val["ticker"] for val in draft_assets].index(asset.ticker)
+            draft_assets[i]["quantity"] += quantity
+            draft_assets[i]["total_cost"] += quantity * draft_assets[i]["price"]
+        else:    
+            draft_assets.append({"ticker": asset.ticker, "name": asset.name, "price": price, "quantity": quantity, "total_cost": total_cost})
         request.session["draft_assets"] = draft_assets
 
         return redirect(reverse("create_portfolio"))
@@ -177,6 +184,7 @@ class PortfolioCreateView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         draft_assets = self.request.session.get("draft_assets", [])
         context["draft_assets"] = draft_assets
+        context["total_cost"] = sum([asset["price"] * asset["quantity"] for asset in draft_assets])
         return context
 
     def post(self, request, *args, **kwargs):
@@ -229,7 +237,7 @@ class CreatedPortfolioView(LoginRequiredMixin, View):
         for asset in draft_assets:
             PurchasedAsset.objects.create(
                 portfolio = portfolio,
-                asset = Asset.objects.get(ticker=asset["ticker"]),
+                asset = Asset.objects.get(ticker = asset["ticker"]),
                 purchase_price = asset["price"],
                 purchase_quantity = asset["quantity"],
             )

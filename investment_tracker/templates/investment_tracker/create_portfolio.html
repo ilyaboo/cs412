@@ -17,32 +17,36 @@
     <a href="{% url 'all_assets' %}?from_portfolio=true">Add Asset</a>
 
     <h2>Draft Assets</h2>
-    <table width = "100%">
-        <tr>
-            <th>Ticker</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Total</th>
-            <th>Action</th>
-        </tr>
-        {% for asset in draft_assets %}
-        <tr>
-            <td>{{ asset.ticker }}</td>
-            <td>{{ asset.quantity }}</td>
-            <td>{{ asset.price }}</td>
-            <td>{{ asset.total_cost }}</td>
-            <td>
-                <form method = "post" action = "{% url 'remove_draft_asset' asset.ticker %}">
-                    {% csrf_token %}
-                    <button type = "submit"> Remove </button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
 
-    <p>Total Cost: {{ total_cost }}</p>
+    {% if draft_assets %}
+        <table width = "100%">
+            <tr>
+                <th>Ticker</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+                <th>Action</th>
+            </tr>
+            {% for asset in draft_assets %}
+            <tr>
+                <td>{{ asset.ticker }}</td>
+                <td>{{ asset.quantity }}</td>
+                <td>${{ asset.price|floatformat:2 }}</td>
+                <td>${{ asset.total_cost|floatformat:2 }}</td>
+                <td>
+                    <form method = "post" action = "{% url 'remove_draft_asset' asset.ticker %}">
+                        {% csrf_token %}
+                        <button type = "submit"> Remove </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
 
-    
+        <p>Total Cost: ${{ total_cost|floatformat:2 }}</p>
+
+    {% else %}
+        No assets added yet.
+    {% endif %}
 
 {% endblock %}
