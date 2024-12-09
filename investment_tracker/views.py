@@ -133,7 +133,7 @@ class AssetPageView(DetailView):
         context["price"] = round(asset.get_current_price(), 2)
 
         # obtaining historical data for graph
-        historical_data = get_historical_prices(asset.ticker)
+        historical_data = get_historical_prices(asset.ticker, period = "1y", interval = "60m")
         context["historical_prices"] = historical_data.to_json(date_format = "iso")
 
         # checking if we are in purchase mode

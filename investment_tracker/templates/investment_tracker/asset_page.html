@@ -16,6 +16,18 @@
         {{ historical_prices|safe }}
     </div>
 
+    <!-- period selection -->
+    <div>
+        <label for = "timePeriod"> Select Time Period: </label>
+        <select id = "timePeriod">
+            <option value = "7"> Last 7 Days </option>
+            <option value = "30" selected> Last 30 Days </option>
+            <option value = "90"> Last 3 Months </option>
+            <option value = "180"> Last 6 Months </option>
+            <option value = "365"> Last Year </option>
+        </select>
+    </div>
+
     <!-- graph container -->
     <canvas id = "priceChart" width = "400" height = "200"></canvas>
 
