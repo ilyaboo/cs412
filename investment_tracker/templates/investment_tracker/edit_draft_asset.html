@@ -1,0 +1,35 @@
+{% extends 'investment_tracker/base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+    <h1> Edit Asset in Portfolio Draft </h1>
+
+    <p><strong>Ticker:</strong> {{ asset.ticker }}</p>
+    <p><strong>Name:</strong> {{ asset.name }}</p>
+    <p><strong>Price per Unit:</strong> $<span id="price">{{ price|floatformat:2 }}</span></p>
+    <p><strong>Type:</strong> {{ asset.asset_type }}</p>
+
+    <form method = "post" action = "">
+        {% csrf_token %}
+
+
+        <label for = "quantity"> Quantity: </label>
+        <input type = "number" name = "quantity" id = "quantity" value = "{{ quantity }}" min = "0.001" step = "0.001" required oninput = "updateTotalCost()">
+        
+        <br>
+
+        <label for = "total_cost"> Total Cost: </label>
+        <input type = "number" name = "total_cost" id = "total_cost" value = "{{ total_cost }}" min = "0.01" step = "0.01" required oninput = "updateQuantity()">
+
+        <br>
+
+        <button type = "submit"> Update Portfolio Draft </button>
+    </form>
+
+    <a href = "{% url 'create_portfolio' %}"> Back to Portfolio </a>
+
+    <script src = "{% static 'js/asset_purchase.js' %}"></script>
+
+{% endblock %}

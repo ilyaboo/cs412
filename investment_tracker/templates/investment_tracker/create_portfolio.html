@@ -3,11 +3,11 @@
 {% block content %}
 
     <h1>Create Portfolio</h1>
-    <form method="post" action="">
+    <form method = "post" action="">
         {% csrf_token %}
-        <label for="portfolio_name">Portfolio Name:</label>
-        <input type="text" name="portfolio_name" id="portfolio_name" required>
-        <button type="submit">Create Portfolio</button>
+        <label for = "portfolio_name"> Portfolio Name: </label>
+        <input type = "text" name = "portfolio_name" id = "portfolio_name" required>
+        <button type = "submit"> Create Portfolio </button>
     </form>
 
     <form method = "post" action = "{% url 'clear_draft_assets' %}">
@@ -34,6 +34,10 @@
                 <td>${{ asset.price|floatformat:2 }}</td>
                 <td>${{ asset.total_cost|floatformat:2 }}</td>
                 <td>
+                    <form method = "get" action = "{% url 'edit_draft_asset' asset.ticker %}">
+                        <button type = "submit"> Edit </button>
+                    </form>
+                    <br>
                     <form method = "post" action = "{% url 'remove_draft_asset' asset.ticker %}">
                         {% csrf_token %}
                         <button type = "submit"> Remove </button>

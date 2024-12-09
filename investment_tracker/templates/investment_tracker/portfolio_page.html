@@ -3,7 +3,26 @@
 {% block content %}
 
     <h1> {{ portfolio.portfolio_name }} </h1>
-    <p> Created by {{ portfolio.portfolio_owner.first_name }} at {{ portfolio.portfolio_creation_time }}</p>
+
+    <h3> Created by {{ portfolio.portfolio_owner.first_name }} <h3>
+    <br>
+    <h3> Created on {{ portfolio.portfolio_creation_time }} </h3>
+    <br>
+    <h3> Total Invested: ${{ portfolio.get_money_invested_in_portfolio|floatformat:2 }} </h3>
+    <br>
+    <h3> Current Value: ${{ portfolio.get_current_portfolio_value|floatformat:2 }} </h3>
+    <br>
+    <h3> Value Change in $: 
+        <span class = "{% if portfolio.get_portfolio_value_change|slice:":1" == "+" %}positive{% elif portfolio.get_portfolio_value_change|slice:":1" == "-" %}negative{% endif %}">
+            {{ portfolio.get_portfolio_value_change }}
+        </span>
+    </h3>
+    <br> 
+    <h3> Value Change in %: 
+        <span class = "{% if portfolio.get_portfolio_value_change_percentage|slice:":1" == "+" %}positive{% elif portfolio.get_portfolio_value_change_percentage|slice:":1" == "-" %}negative{% endif %}">
+            {{ portfolio.get_portfolio_value_change_percentage }}
+        </span>
+    </h3>
 
     <table style = "width: 100%">
 
@@ -12,11 +31,13 @@
             <th> Name </th>
             <th> Asset Type </th>
             <th> Purchase Date </th>
-            <th> Quantity Purchased </th>
-            <th> Purchase Price in $ </th>
-            <th> Current Price in $ </th>
-            <th> Value Change in $ </th>
-            <th> Value Change in %</th>
+            <th> Quantity </th>
+            <th> Purchase Price </th>
+            <th> Purchase Value </th>
+            <th> Current Price </th>
+            <th> Current Value </th>
+            <th> Value Change </th>
+            <th> Value Change </th>
         </tr>
 
         {% for portfolio_asset in portfolio_assets_with_info %}
@@ -27,6 +48,8 @@
                 <td> {{ portfolio_asset.portfolio_asset_object.purchase_time }} </td>
                 <td> {{ portfolio_asset.portfolio_asset_object.get_formatted_purchase_quantity }} </td>
                 <td> ${{ portfolio_asset.portfolio_asset_object.purchase_price|floatformat:2 }} </td>
+                <td> ${{ portfolio_asset.portfolio_asset_object.get_initial_value|floatformat:2 }} </td>
+                <td> ${{ portfolio_asset.current_price|floatformat:2 }} </td>
                 <td> ${{ portfolio_asset.current_value|floatformat:2 }} </td>
                 <td>
                     <span class = "{% if portfolio_asset.current_value_change|slice:":1" == "+" %}positive{% elif portfolio_asset.current_value_change|slice:":1" == "-" %}negative{% endif %}">
@@ -35,7 +58,7 @@
                 </td>
                 <td>
                     <span class = "{% if portfolio_asset.current_value_change_percentage|slice:":1" == "+" %}positive{% elif portfolio_asset.current_value_change_percentage|slice:":1" == "-" %}negative{% endif %}">
-                        {{ portfolio_asset.current_value_change_percentage }}%
+                        {{ portfolio_asset.current_value_change_percentage }}
                     </span>
                 </td>
             </tr>

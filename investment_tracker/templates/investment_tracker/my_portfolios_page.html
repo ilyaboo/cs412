@@ -10,6 +10,8 @@
             <th> Portfolio Name </th>
             <th> Money Invested in $ </th>
             <th> Current Price in $ </th>
+            <th> Value Change in $ </th>
+            <th> Value Change in % </th>
         </tr>
 
         {% for portfolio in user_portfolios %}
@@ -18,11 +20,14 @@
                 <td> {{ portfolio.get_money_invested_in_portfolio|floatformat:2  }} </td>
                 <td> {{ portfolio.get_current_portfolio_value|floatformat:2  }} </td>
                 <td>
-                    <td>
-                        <span class="{% if portfolio.get_portfolio_value_change|slice:":1" == "+" %}positive{% elif portfolio.get_portfolio_value_change|slice:":1" == "-" %}negative{% endif %}">
-                            {{ portfolio.get_portfolio_value_change }}
-                        </span>
-                    </td>
+                    <span class = "{% if portfolio.get_portfolio_value_change|slice:":1" == "+" %}positive{% elif portfolio.get_portfolio_value_change|slice:":1" == "-" %}negative{% endif %}">
+                        {{ portfolio.get_portfolio_value_change }}
+                    </span>
+                </td>
+                <td>
+                    <span class = "{% if portfolio.get_portfolio_value_change_percentage|slice:":1" == "+" %}positive{% elif portfolio.get_portfolio_value_change_percentage|slice:":1" == "-" %}negative{% endif %}">
+                        {{ portfolio.get_portfolio_value_change_percentage }}
+                    </span>
                 </td>
             </tr>
         {% endfor %}

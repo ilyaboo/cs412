@@ -15,6 +15,13 @@ class ShowMainPageView(ListView):
     template_name = "investment_tracker/main_page.html"
     context_object_name = "profiles"
 
+    def get_context_data(self, **kwargs):
+        """ context data to pass portfolios """
+
+        context = super().get_context_data(**kwargs)
+        context["all_portfolios"] = sorted(list(Portfolio.objects.all()), key = lambda x: x.get_portfolio_value_change_percentage_raw(), reverse = True)
+        return context
+
 class MyProfilePageView(LoginRequiredMixin, DetailView):
     """ view to display logged-in user's profile """
 
@@ -62,7 +69,7 @@ class PortfolioPageView(DetailView):
         portfolio_assets_with_info = [{"portfolio_asset_object": asset,
                                        "current_price": asset.asset.get_current_price()} \
                                         for asset in portfolio_assets_objects]
-        
+
         # obtaining changes in value
         for i in range(len(portfolio_assets_with_info)):
             current_price = portfolio_assets_with_info[i]["current_price"]
@@ -72,14 +79,17 @@ class PortfolioPageView(DetailView):
                                                                     float(portfolio_assets_with_info[i]["portfolio_asset_object"].get_initial_value())
             portfolio_assets_with_info[i]["current_value_change_percentage"] = portfolio_assets_with_info[i]["current_value_change"] / \
                                                                                 float(portfolio_assets_with_info[i]["portfolio_asset_object"].get_initial_value()) * 100
-            if portfolio_assets_with_info[i]["current_value_change"] >= 0:
-                portfolio_assets_with_info[i]["current_value_change"] = "+$" + str(round(portfolio_assets_with_info[i]["current_value_change"], 2))
-                portfolio_assets_with_info[i]["current_value_change_percentage"] = "+" + str(round(portfolio_assets_with_info[i]["current_value_change_percentage"], 2))
+            if portfolio_assets_with_info[i]["current_value_change"] >= 0 or round(portfolio_assets_with_info[i]["current_value_change"], 2) == 0:
+                portfolio_assets_with_info[i]["current_value_change"] = abs(portfolio_assets_with_info[i]["current_value_change"])
+                portfolio_assets_with_info[i]["current_value_change_percentage"] = abs(portfolio_assets_with_info[i]["current_value_change_percentage"])
+                portfolio_assets_with_info[i]["current_value_change"] = f'+${format(portfolio_assets_with_info[i]["current_value_change"], '.2f')}'
+                portfolio_assets_with_info[i]["current_value_change_percentage"] = f'+{format(portfolio_assets_with_info[i]["current_value_change_percentage"], '.2f')}%'
             else:
-                portfolio_assets_with_info[i]["current_value_change"] = "-$" + str(round(portfolio_assets_with_info[i]["current_value_change"], 2))[1 : ]
-                portfolio_assets_with_info[i]["current_value_change_percentage"] = str(round(portfolio_assets_with_info[i]["current_value_change_percentage"], 2))
+                portfolio_assets_with_info[i]["current_value_change"] = f'-${format(portfolio_assets_with_info[i]["current_value_change"], '.2f')[1 : ]}'
+                portfolio_assets_with_info[i]["current_value_change_percentage"] = f'{format(portfolio_assets_with_info[i]["current_value_change_percentage"], '.2f')}%'
 
         context["portfolio_assets_with_info"] = portfolio_assets_with_info
+        context["portfolio_assets_with_info"].sort(key = lambda x: x["current_value"], reverse = True)
         
         return context
     
@@ -98,10 +108,7 @@ class AssetPageView(DetailView):
         context = super().get_context_data(**kwargs)
         asset = self.object
 
-        if asset.asset_type == "stock":
-            context["price"] = round(get_latest_stock_price(asset.ticker), 2)
-        else:
-            context["price"] = round(get_latest_crypto_price(asset.ticker), 2)
+        context["price"] = round(asset.get_current_price(), 2)
 
         # checking if we are in purchase mode
         context["from_portfolio"] = self.request.GET.get("from_portfolio", "false") == "true"
@@ -115,11 +122,7 @@ class AddToPortfolioDraftView(LoginRequiredMixin, View):
         ticker = kwargs["ticker"]
         asset = Asset.objects.get(ticker = ticker)
 
-        if asset.asset_type == "stock":
-            price = get_latest_stock_price(ticker)
-        else:
-            price = get_latest_crypto_price(ticker)
-
+        price = asset.get_current_price()
         quantity = float(request.POST.get("quantity", 1))
         total_cost = float(request.POST.get("total_cost", float(price) * quantity))
         
@@ -235,6 +238,51 @@ class ClearDraftAssetsView(LoginRequiredMixin, View):
         
         # redirecting back to the portfolio creation page
         return redirect("create_portfolio")
+    
+class EditDraftAssetView(LoginRequiredMixin, TemplateView):
+    """ view to handle editing an asset in the portfolio draft """
+
+    template_name = "investment_tracker/edit_draft_asset.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        ticker = kwargs["ticker"]
+
+        # getting the asset details
+        asset = Asset.objects.get(ticker = ticker)
+        draft_assets = self.request.session.get("draft_assets", [])
+        draft_asset = next((item for item in draft_assets if item["ticker"] == ticker), None)
+
+        context["asset"] = asset
+        context["price"] = round(asset.get_current_price(), 2)
+
+        if draft_asset:
+            context["quantity"] = draft_asset["quantity"]
+            context["total_cost"] = draft_asset["quantity"] * context["price"]
+        else:
+            # in case draft was never created
+            context["quantity"] = 1
+            context["total_cost"] = asset.get_current_price()
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        ticker = kwargs["ticker"]
+        asset = Asset.objects.get(ticker = ticker)
+
+        quantity = float(request.POST.get("quantity", 1))
+        total_cost = float(request.POST.get("total_cost", asset.get_current_price() * quantity))
+
+        # updating the asset in the draft
+        draft_assets = request.session.get("draft_assets", [])
+        for draft_asset in draft_assets:
+            if draft_asset["ticker"] == ticker:
+                draft_asset["quantity"] = quantity
+                draft_asset["total_cost"] = total_cost
+                break
+
+        request.session["draft_assets"] = draft_assets
+        return redirect(reverse("create_portfolio"))
     
 class RemoveDraftAssetView(View):
     """ view to handle the removal of an asset from the portfolio draft """

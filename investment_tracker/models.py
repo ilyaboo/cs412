@@ -50,10 +50,30 @@ class Portfolio(models.Model):
         """ method that calculates the absolute value change of portfolio in USD and formats it """
 
         change = self.get_current_portfolio_value() - self.get_money_invested_in_portfolio()
-        if change >= 0:
+        if change >= 0 or round(change, 2) == 0:
+            change = abs(change)
             return f'+${format(change, '.2f')}'
         else:
             return f'-${format(change, '.2f')[1 : ]}'
+        
+    def get_portfolio_value_change_percentage(self) -> str:
+        """ method that calculates the value change of portfolio in % and formats it """
+
+        change = (self.get_current_portfolio_value() - self.get_money_invested_in_portfolio()) / self.get_money_invested_in_portfolio() * 100
+        change_value = self.get_current_portfolio_value() - self.get_money_invested_in_portfolio()
+        if change >= 0 or round(change_value, 2) == 0:
+            change = abs(change)
+            return f'+{format(change, '.2f')}%'
+        else:
+            if round(change, 2) == 0:
+                return f'-{format(change, '.2f')}%'
+            else:
+                return f'{format(change, '.2f')}%'
+    
+    def get_portfolio_value_change_percentage_raw(self) -> float:
+        """ method that calculates the  value change of portfolio in % and returns as float """
+
+        return (self.get_current_portfolio_value() - self.get_money_invested_in_portfolio()) / self.get_money_invested_in_portfolio() * 100
 
 class Asset(models.Model):
     """ a model that corresponds to a purchasable stock/crypto asset """
