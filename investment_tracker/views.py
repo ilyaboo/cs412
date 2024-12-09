@@ -1,12 +1,13 @@
 from typing import Any
 from django.db.models.base import Model as Model
 from django.urls import reverse
-from django.db.models.query import QuerySet
 from django.views.generic import View, ListView, DetailView, TemplateView
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, render, redirect
 from .models import Profile, Portfolio, Asset, PurchasedAsset
-from .utils.yfinance_utils import get_latest_stock_price, get_latest_crypto_price
+from .forms import CustomUserCreationForm
+from .utils.yfinance_utils import get_historical_prices
 
 class ShowMainPageView(ListView):
     """ view to display the main page """
@@ -33,6 +34,27 @@ class MyProfilePageView(LoginRequiredMixin, DetailView):
         """ getting the profile of the currently logged-in user """
 
         return get_object_or_404(Profile, user = self.request.user)
+    
+class RegisterView(View):
+    """ view for user registration """
+
+    def get(self, request):
+        form = CustomUserCreationForm()
+        return render(request, "investment_tracker/register.html", {"form": form})
+
+    def post(self, request):
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+
+            # saving first and last name to the Profile
+            first_name = form.cleaned_data.get("first_name")
+            last_name = form.cleaned_data.get("last_name")
+
+            Profile.objects.create(user = user, first_name = first_name, last_name = last_name)
+
+            return redirect("login") 
+        return render(request, "investment_tracker/register.html", {"form": form})
     
 class MyPortfoliosPageView(LoginRequiredMixin, DetailView):
     """ view to display user's profile """
@@ -109,6 +131,10 @@ class AssetPageView(DetailView):
         asset = self.object
 
         context["price"] = round(asset.get_current_price(), 2)
+
+        # obtaining historical data for graph
+        historical_data = get_historical_prices(asset.ticker)
+        context["historical_prices"] = historical_data.to_json(date_format = "iso")
 
         # checking if we are in purchase mode
         context["from_portfolio"] = self.request.GET.get("from_portfolio", "false") == "true"

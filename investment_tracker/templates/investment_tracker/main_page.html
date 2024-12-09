@@ -18,7 +18,7 @@
         {% for portfolio in all_portfolios %}
             <tr>
                 <td> <a href = "{% url 'portfolio' portfolio.slug %}"> {{ portfolio.portfolio_name }} </a> </td>
-                <td> {{ portfolio.portfolio_owner.first_name }} </td>
+                <td> {{ portfolio.portfolio_owner.user.username }} </td>
                 <td> {{ portfolio.get_money_invested_in_portfolio|floatformat:2  }} </td>
                 <td> {{ portfolio.get_current_portfolio_value|floatformat:2  }} </td>
                 <td>

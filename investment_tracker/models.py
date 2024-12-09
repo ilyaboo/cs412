@@ -65,10 +65,7 @@ class Portfolio(models.Model):
             change = abs(change)
             return f'+{format(change, '.2f')}%'
         else:
-            if round(change, 2) == 0:
-                return f'-{format(change, '.2f')}%'
-            else:
-                return f'{format(change, '.2f')}%'
+            return f'{format(change, '.2f')}%'
     
     def get_portfolio_value_change_percentage_raw(self) -> float:
         """ method that calculates the  value change of portfolio in % and returns as float """

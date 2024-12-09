@@ -11,16 +11,30 @@
     <p><strong>Price per Unit:</strong> $<span id="price">{{ price|floatformat:2 }}</span></p>
     <p><strong>Type:</strong> {{ asset.asset_type }}</p>
 
+    <!-- including a hidden div to store JSON data -->
+    <div id = "historicalPrices" style = "display: none;">
+        {{ historical_prices|safe }}
+    </div>
+
+    <!-- graph container -->
+    <canvas id = "priceChart" width = "400" height = "200"></canvas>
+
+    <!-- loading the Chart.js library -->
+    <script src = "https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- load the external JavaScript file -->
+    <script src = "{% static 'js/price_chart.js' %}"></script>
+
     {% if from_portfolio %}
         <form method = "post" action = "{% url 'add_to_draft' asset.ticker %}">
             {% csrf_token %}
             <label for = "quantity"> Quantity: </label>
-            <input type = "number" name = "quantity" id = "quantity" value = "1" min = "0.001" step = "0.001" required oninput="updateTotalCost()">
+            <input type = "number" name = "quantity" id = "quantity" value = "1" min = "0.001" step = "0.001" required oninput = "updateTotalCost()">
             
             <br>
 
             <label for = "total_cost"> Total Cost: </label>
-            <input type = "number" name = "total_cost" id = "total_cost" value = "{{ price }}" min = "0.01" step = "0.01" required oninput="updateQuantity()">
+            <input type = "number" name = "total_cost" id = "total_cost" value = "{{ price }}" min = "0.01" step = "0.01" required oninput = "updateQuantity()">
 
             <br>
 
