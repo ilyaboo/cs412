@@ -11,25 +11,33 @@
     <p><strong>Price per Unit:</strong> $<span id="price">{{ price|floatformat:2 }}</span></p>
     <p><strong>Type:</strong> {{ asset.asset_type }}</p>
 
-    <!-- including a hidden div to store JSON data -->
-    <div id = "historicalPrices" style = "display: none;">
-        {{ historical_prices|safe }}
-    </div>
-
     <!-- period selection -->
     <div>
         <label for = "timePeriod"> Select Time Period: </label>
         <select id = "timePeriod">
-            <option value = "7"> Last 7 Days </option>
-            <option value = "30" selected> Last 30 Days </option>
-            <option value = "90"> Last 3 Months </option>
-            <option value = "180"> Last 6 Months </option>
-            <option value = "365"> Last Year </option>
+            <option value = "1d"> 1 Day </option>
+            <option value = "5d"> 5 Days </option>
+            <option value = "1mo" selected> 1 Month </option>
+            <option value = "3mo"> 3 Months </option>
+            <option value = "6mo"> 6 Months </option>
+            <option value = "1y"> 1 Year </option>
+            <option value = "2y"> 2 Years </option>
+            <option value = "5y"> 5 Years </option>
         </select>
     </div>
 
     <!-- graph container -->
     <canvas id = "priceChart" width = "400" height = "200"></canvas>
+
+    <!-- hidden divs to store JSON data for each time period -->
+    <div id = "dayHistoricalPrices" style = "display: none;"> {{ day_historical_prices|safe }} </div>
+    <div id = "fiveDaysHistoricalPrices" style = "display: none;"> {{ five_days_historical_prices|safe }} </div>
+    <div id = "monthHistoricalPrices" style = "display: none;"> {{ month_historical_prices|safe }} </div>
+    <div id = "threeMonthsHistoricalPrices" style = "display: none;"> {{ three_months_historical_prices|safe }} </div>
+    <div id = "sixMonthsHistoricalPrices" style = "display: none;"> {{ six_months_historical_prices|safe }} </div>
+    <div id = "yearHistoricalPrices" style = "display: none;"> {{ year_historical_prices|safe }} </div>
+    <div id = "twoYearsHistoricalPrices" style = "display: none;"> {{ two_years_historical_prices|safe }} </div>
+    <div id = "fiveYearsHistoricalPrices" style = "display: none;"> {{ five_years_historical_prices|safe }} </div>
 
     <!-- loading the Chart.js library -->
     <script src = "https://cdn.jsdelivr.net/npm/chart.js"></script>

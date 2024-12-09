@@ -1,5 +1,6 @@
 from typing import Any
 from django.db.models.base import Model as Model
+from django.http import JsonResponse
 from django.urls import reverse
 from django.views.generic import View, ListView, DetailView, TemplateView
 from django.contrib.auth.forms import UserCreationForm
@@ -8,6 +9,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from .models import Profile, Portfolio, Asset, PurchasedAsset
 from .forms import CustomUserCreationForm
 from .utils.yfinance_utils import get_historical_prices
+import json
 
 class ShowMainPageView(ListView):
     """ view to display the main page """
@@ -114,7 +116,7 @@ class PortfolioPageView(DetailView):
         context["portfolio_assets_with_info"].sort(key = lambda x: x["current_value"], reverse = True)
         
         return context
-    
+
 class AssetPageView(DetailView):
     """ view to display information about the asset """
 
@@ -132,9 +134,31 @@ class AssetPageView(DetailView):
 
         context["price"] = round(asset.get_current_price(), 2)
 
-        # obtaining historical data for graph
-        historical_data = get_historical_prices(asset.ticker, period = "1y", interval = "60m")
-        context["historical_prices"] = historical_data.to_json(date_format = "iso")
+        # obtaining historical data for graph for different time periods and intervals
+
+        day_historical_prices = get_historical_prices(asset.ticker, period = "1d", interval = "5m")
+        context["day_historical_prices"] = day_historical_prices.to_json(date_format = "iso")
+
+        five_days_historical_prices = get_historical_prices(asset.ticker, period = "5d", interval = "30m")
+        context["five_days_historical_prices"] = five_days_historical_prices.to_json(date_format = "iso")
+
+        month_historical_prices = get_historical_prices(asset.ticker, period = "1mo", interval = "1h")
+        context["month_historical_prices"] = month_historical_prices.to_json(date_format = "iso")
+
+        three_months_historical_prices = get_historical_prices(asset.ticker, period = "3mo", interval = "1d")
+        context["three_months_historical_prices"] = three_months_historical_prices.to_json(date_format = "iso")
+
+        six_months_historical_prices = get_historical_prices(asset.ticker, period = "6mo", interval = "1d")
+        context["six_months_historical_prices"] = six_months_historical_prices.to_json(date_format = "iso")
+
+        year_historical_prices = get_historical_prices(asset.ticker, period = "1y", interval = "1wk")
+        context["year_historical_prices"] = year_historical_prices.to_json(date_format = "iso")
+
+        two_years_historical_prices = get_historical_prices(asset.ticker, period = "2y", interval = "1wk")
+        context["two_years_historical_prices"] = two_years_historical_prices.to_json(date_format = "iso")
+
+        five_years_historical_prices = get_historical_prices(asset.ticker, period = "5y", interval = "1mo")
+        context["five_years_historical_prices"] = five_years_historical_prices.to_json(date_format = "iso")
 
         # checking if we are in purchase mode
         context["from_portfolio"] = self.request.GET.get("from_portfolio", "false") == "true"
