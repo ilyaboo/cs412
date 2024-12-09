@@ -20,9 +20,13 @@ def get_latest_crypto_price(ticker: str) -> float:
         print(f"Error fetching data for {ticker}: {e} (crypto)")
         return None
     
-def get_historical_prices(ticker: str, period: str = "3mo", interval: str = "1d"):
+def get_historical_prices(ticker: str, period: str = "3mo", interval: str = "1d", type: str = "stock"):
     """ fethcing historical prices for the given ticker """
 
-    stock = yf.Ticker(ticker)
-    data = stock.history(period = period, interval = interval)
+    if type == "stock":
+        ticker = yf.Ticker(ticker)
+    else:
+        ticker = yf.Ticker(ticker + "-USD")
+        
+    data = ticker.history(period = period, interval = interval)
     return data[['Close']]
