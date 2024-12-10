@@ -248,7 +248,13 @@ canvas {
     gap: 10px;
 }
 
-.button-row .button {
+.button-row-2 {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.button-row .button .button-row-2 {
     display: inline-block;
     padding: 8px 15px;
     font-size: 1rem;
@@ -260,6 +266,34 @@ canvas {
     transition: background-color 0.3s;
 }
 
-.button-row .button:hover {
+.button-row .button:hover .button-row-2 {
+    background-color: #006f53;
+}
+
+.button-red {
+    background-color: #E74C3C;
+}
+
+.button-red:hover {
+    background-color: #C0392B;
+}
+
+/* link styled as a button */
+.button-link {
+    display: inline-block;
+    padding: 6px 30px;
+    font-size: 1rem;
+    background-color: #008f68;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s;
+    box-sizing: border-box;
+}
+
+.button-link:hover {
     background-color: #006f53;
 }

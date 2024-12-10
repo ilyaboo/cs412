@@ -12,7 +12,7 @@
     <div class = "grid-container">
         <div class = "grid-item">
 
-            <div class="info">
+            <div class = "info">
                 <p><strong>Created By:</strong> {{ portfolio.portfolio_owner.user.username }}</p>
                 <p><strong>Created On:</strong> {{ portfolio.portfolio_creation_time }}</p>
                 <p><strong>Assets:</strong> {{ portfolio_assets_to_display }}</p>
@@ -60,7 +60,7 @@
 
                     <form method = "post" action = "{% url 'delete_portfolio' portfolio.slug %}">
                         {% csrf_token %}
-                        <button type = "submit" class = "button" style = "background-color: #E74C3C;"> Delete Portfolio </button>
+                        <button type = "submit" class = "button button-red"> Delete Portfolio </button>
                     </form>
                 {% endif %}
             </div>
