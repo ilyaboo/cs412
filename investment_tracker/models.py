@@ -34,7 +34,9 @@ class Portfolio(models.Model):
         portfolio_assets = PurchasedAsset.objects.filter(portfolio = self)
         total_value = 0
         for portfolio_asset in portfolio_assets:
-            total_value += float(portfolio_asset.asset.get_current_price()) * float(portfolio_asset.purchase_quantity)
+            tmp = portfolio_asset.asset.get_current_price()
+            if tmp != None:
+                total_value += float(tmp) * float(portfolio_asset.purchase_quantity)
         return total_value
     
     def get_money_invested_in_portfolio(self) -> float:
