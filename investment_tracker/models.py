@@ -82,6 +82,7 @@ class Asset(models.Model):
     name = models.CharField(max_length = 150)
     ticker = models.CharField(max_length = 10)
     asset_type = models.CharField(max_length = 15, choices = ASSET_TYPE_CHOICES, default = "stock")
+    latest_price = models.DecimalField(max_digits = 12, decimal_places = 4)
 
     def __str__(self):
         """ string representation of a purchasable asset """
@@ -92,9 +93,15 @@ class Asset(models.Model):
         """ function which returns the current price of the asset """
 
         if self.asset_type == "stock":
-            return get_latest_stock_price(self.ticker)
+            price = get_latest_stock_price(self.ticker)
         else:
-            return get_latest_crypto_price(self.ticker)
+            price =  get_latest_crypto_price(self.ticker)
+
+        if price == None:
+            return self.latest_price
+        else:
+            self.latest_price = price
+            return price
     
 class PurchasedAsset(models.Model):
     """ a model that corresponds to an asset purchased (added) to the portfolio """
@@ -139,7 +146,7 @@ def load_data():
     f = open("investment_tracker/data/crypto_tickers.csv")
     for line in f:
         ticker, name = line.split(';')
-        new_asset = Asset(name = name, ticker = ticker, asset_type = "crypto")
+        new_asset = Asset(name = name, ticker = ticker, asset_type = "crypto", latest_price = 0)
         new_asset.save()
         print(f'Created crypto: {new_asset}')
     f.close()

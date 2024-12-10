@@ -7,7 +7,7 @@ def get_latest_stock_price(ticker: str) -> float:
     for _ in range(50):
         try:
             stock = yf.Ticker(ticker)
-            return stock.fast_info['lastPrice']
+            return stock.history(period = "5d", interval = "1m")["Close"].iloc[-1]
         except Exception as e:
             print(f"Error fetching data for {ticker}: {e} (stock)")
     return None
@@ -19,7 +19,7 @@ def get_latest_crypto_price(ticker: str) -> float:
     for _ in range(50):
         try:
             crypto = yf.Ticker(ticker + "-USD")
-            return crypto.fast_info['lastPrice']
+            return crypto.history(period = "5d", interval = "1m")["Close"].iloc[-1]
         except Exception as e:
             print(f"Error fetching data for {ticker}: {e} (crypto)")
     return None
