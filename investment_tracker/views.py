@@ -119,10 +119,10 @@ class PortfolioPageView(DetailView):
 
         # obtaining and processing data for graphs
 
-        day_historical_total_values = get_historical_total_values(portfolio_assets_objects, "1d", "5m")
+        day_historical_total_values = get_historical_total_values(portfolio_assets_objects, "1d", "5m", "1min")
         context["day_historical_prices"] = day_historical_total_values.to_json(date_format = "iso")
 
-        five_days_historical_total_values = get_historical_total_values(portfolio_assets_objects, "5d", "30m")
+        five_days_historical_total_values = get_historical_total_values(portfolio_assets_objects, "5d", "30m", "1min")
         context["five_days_historical_prices"] = five_days_historical_total_values.to_json(date_format = "iso")
 
         month_historical_total_values = get_historical_total_values(portfolio_assets_objects, "1mo", "1h")

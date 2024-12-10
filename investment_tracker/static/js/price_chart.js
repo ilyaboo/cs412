@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
         options: {
             responsive: true,
             plugins: {
-                legend: { display: true },
+                legend: { display: false },
                 tooltip: { enabled: true },
             },
             scales: {
@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     title: { display: true, text: "Price ($)" },
                     ticks: {
                         callback: function (value) {
-                            return value.toFixed(2);
+                            return `$${value.toFixed(2)}`;
                         },
                     },
                 },

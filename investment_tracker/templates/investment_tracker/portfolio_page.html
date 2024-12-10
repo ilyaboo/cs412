@@ -33,12 +33,25 @@
     <div id = "yearHistoricalPrices" style = "display: none;"> {{ year_historical_prices|safe }} </div>
     <div id = "twoYearsHistoricalPrices" style = "display: none;"> {{ two_years_historical_prices|safe }} </div>
     <div id = "fiveYearsHistoricalPrices" style = "display: none;"> {{ five_years_historical_prices|safe }} </div>
+    <div id="portfolioCreationDate" style="display: none;">
+        {{ portfolio.portfolio_creation_time|date:"Y-m-d H:i:s" }}
+    </div>
+    <div id="portfolioMoneyInvested" style="display: none;">
+        {{ portfolio.get_money_invested_in_portfolio }}
+    </div>
+    {{ portfolio.get_money_invested_in_portfolio }}
+    {{ portfolio.portfolio_creation_time }}
+    
 
     <!-- loading the Chart.js library -->
     <script src = "https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src = "https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+
+
 
     <!-- load the external JavaScript file -->
-    <script src = "{% static 'js/price_chart.js' %}"></script>
+    <script src = "{% static 'js/value_chart.js' %}"></script>
 
     <h3> Created by {{ portfolio.portfolio_owner.user.username }} <h3>
     <br>

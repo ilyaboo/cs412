@@ -9,7 +9,7 @@ def set_historical_values(df: pd.DataFrame, quantity: float) -> None:
     df["Close"] = df["Close"] * quantity
     return
 
-def combine_historical_closes(df1: pd.DataFrame, df2: pd.DataFrame) -> pd.DataFrame:
+def combine_historical_closes(df1: pd.DataFrame, df2: pd.DataFrame, time_rounding: str = "1h") -> pd.DataFrame:
     """ helper function that combines the Close values of two DataFrames and 
     return the result as a new dataset """
 
@@ -18,8 +18,8 @@ def combine_historical_closes(df1: pd.DataFrame, df2: pd.DataFrame) -> pd.DataFr
     df2.index = pd.to_datetime(df2.index).tz_localize(None)
 
     # rounding to the nearest even hour for consistency
-    df1.index = df1.index.round("1h")
-    df2.index = df2.index.round("1h")
+    df1.index = df1.index.round(time_rounding)
+    df2.index = df2.index.round(time_rounding)
 
     merged_df = pd.merge(df1, df2, left_index = True, right_index = True, suffixes = ("_1", "_2"), how = "inner")
 
@@ -29,7 +29,7 @@ def combine_historical_closes(df1: pd.DataFrame, df2: pd.DataFrame) -> pd.DataFr
     # returning only the Datetime index and the Combined_Close column
     return merged_df[["Close"]]
 
-def get_historical_total_values(portfolios_assets_objects: list[PurchasedAsset], period: str, interval: str) -> pd.DataFrame:
+def get_historical_total_values(portfolios_assets_objects: list[PurchasedAsset], period: str, interval: str, time_rounding: str = "1h") -> pd.DataFrame:
     """ function that iterates over passed portfolio asset objects and combines historical data to total values """
 
     first_asset = True
@@ -44,7 +44,6 @@ def get_historical_total_values(portfolios_assets_objects: list[PurchasedAsset],
         else:
             asset_historical_prices = get_historical_prices(portfolio_assets_object.asset.ticker, period = period, interval = interval, type = portfolio_assets_object.asset.asset_type)
             set_historical_values(asset_historical_prices, float(portfolio_assets_object.purchase_quantity))
-            historical_total_values = combine_historical_closes(historical_total_values, asset_historical_prices)
+            historical_total_values = combine_historical_closes(historical_total_values, asset_historical_prices, time_rounding)
 
-    print(historical_total_values)
     return historical_total_values
