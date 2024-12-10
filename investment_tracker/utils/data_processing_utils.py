@@ -47,3 +47,19 @@ def get_historical_total_values(portfolios_assets_objects: list[PurchasedAsset],
             historical_total_values = combine_historical_closes(historical_total_values, asset_historical_prices, time_rounding)
 
     return historical_total_values
+
+def get_historical_total_values_differences(historical_total_values: pd.DataFrame, money_invested: float) -> pd.DataFrame:
+    """ function to calculate the difference between each value in the 
+    historical total values and the money invested in the portfolio """
+
+    differences = historical_total_values["Close"] - money_invested
+    differences_df = pd.DataFrame(differences, columns = ["Close"])
+    return differences_df
+
+def get_historical_total_values_differences_percentages(historical_total_values: pd.DataFrame, money_invested: float) -> pd.DataFrame:
+    """ function to calculate the difference between each value in the 
+    historical total values and the money invested in the portfolio in % """
+
+    differences = (historical_total_values["Close"] - money_invested) / money_invested * 100
+    differences_df = pd.DataFrame(differences, columns = ["Close"])
+    return differences_df

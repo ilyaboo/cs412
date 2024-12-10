@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from .models import Profile, Portfolio, Asset, PurchasedAsset
 from .forms import CustomUserCreationForm
 from .utils.yfinance_utils import get_historical_prices
-from .utils.data_processing_utils import get_historical_total_values
+from .utils.data_processing_utils import get_historical_total_values, get_historical_total_values_differences, get_historical_total_values_differences_percentages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
 
@@ -121,29 +121,102 @@ class PortfolioPageView(DetailView):
 
         # obtaining and processing data for graphs
 
+        # one day data
         day_historical_total_values = get_historical_total_values(portfolio_assets_objects, "1d", "5m", "1min")
-        context["day_historical_prices"] = day_historical_total_values.to_json(date_format = "iso")
+        context["day_historical_prices"] = day_historical_total_values.to_json(date_format="iso")
+        day_historical_total_values_differences = get_historical_total_values_differences(
+            day_historical_total_values, self.get_object().get_money_invested_in_portfolio()
+        )
+        context["day_historical_prices_differences"] = day_historical_total_values_differences.to_json(date_format="iso")
+        day_historical_total_values_differences_percentages = get_historical_total_values_differences_percentages(
+            day_historical_total_values, self.get_object().get_money_invested_in_portfolio()
+        )
+        context["day_historical_prices_differences_percentages"] = day_historical_total_values_differences_percentages.to_json(date_format="iso")
 
-        five_days_historical_total_values = get_historical_total_values(portfolio_assets_objects, "5d", "30m", "1min")
-        context["five_days_historical_prices"] = five_days_historical_total_values.to_json(date_format = "iso")
+        # five days data
+        five_days_historical_total_values = get_historical_total_values(portfolio_assets_objects, "5d", "5m", "1min")
+        context["five_days_historical_prices"] = five_days_historical_total_values.to_json(date_format="iso")
+        five_days_historical_total_values_differences = get_historical_total_values_differences(
+            five_days_historical_total_values, self.get_object().get_money_invested_in_portfolio()
+        )
+        context["five_days_historical_prices_differences"] = five_days_historical_total_values_differences.to_json(date_format="iso")
+        five_days_historical_total_values_differences_percentages = get_historical_total_values_differences_percentages(
+            five_days_historical_total_values, self.get_object().get_money_invested_in_portfolio()
+        )
+        context["five_days_historical_prices_differences_percentages"] = five_days_historical_total_values_differences_percentages.to_json(date_format="iso")
 
+        # one month data
         month_historical_total_values = get_historical_total_values(portfolio_assets_objects, "1mo", "1h")
-        context["month_historical_prices"] = month_historical_total_values.to_json(date_format = "iso")
-
+        context["month_historical_prices"] = month_historical_total_values.to_json(date_format="iso")
+        month_historical_total_values_differences = get_historical_total_values_differences(
+            month_historical_total_values, self.get_object().get_money_invested_in_portfolio()
+        )
+        context["month_historical_prices_differences"] = month_historical_total_values_differences.to_json(date_format="iso")
+        month_historical_total_values_differences_percentages = get_historical_total_values_differences_percentages(
+            month_historical_total_values, self.get_object().get_money_invested_in_portfolio()
+        )
+        context["month_historical_prices_differences_percentages"] = month_historical_total_values_differences_percentages.to_json(date_format="iso")
+        
+        # three months data
         three_months_historical_total_values = get_historical_total_values(portfolio_assets_objects, "3mo", "1d")
-        context["three_months_historical_prices"] = three_months_historical_total_values.to_json(date_format = "iso")
+        context["three_months_historical_prices"] = three_months_historical_total_values.to_json(date_format="iso")
+        three_months_historical_total_values_differences = get_historical_total_values_differences(
+            three_months_historical_total_values, self.get_object().get_money_invested_in_portfolio()
+        )
+        context["three_months_historical_prices_differences"] = three_months_historical_total_values_differences.to_json(date_format="iso")
+        three_months_historical_total_values_differences_percentages = get_historical_total_values_differences_percentages(
+            three_months_historical_total_values, self.get_object().get_money_invested_in_portfolio()
+        )
+        context["three_months_historical_prices_differences_percentages"] = three_months_historical_total_values_differences_percentages.to_json(date_format="iso")
 
+        # six months data
         six_months_historical_total_values = get_historical_total_values(portfolio_assets_objects, "6mo", "1d")
-        context["six_months_historical_prices"] = six_months_historical_total_values.to_json(date_format = "iso")
+        context["six_months_historical_prices"] = six_months_historical_total_values.to_json(date_format="iso")
+        six_months_historical_total_values_differences = get_historical_total_values_differences(
+            six_months_historical_total_values, self.get_object().get_money_invested_in_portfolio()
+        )
+        context["six_months_historical_prices_differences"] = six_months_historical_total_values_differences.to_json(date_format="iso")
+        six_months_historical_total_values_differences_percentages = get_historical_total_values_differences_percentages(
+            six_months_historical_total_values, self.get_object().get_money_invested_in_portfolio()
+        )
+        context["six_months_historical_prices_differences_percentages"] = six_months_historical_total_values_differences_percentages.to_json(date_format="iso")
 
+        # one year data
         year_historical_total_values = get_historical_total_values(portfolio_assets_objects, "1y", "1wk")
-        context["year_historical_prices"] = year_historical_total_values.to_json(date_format = "iso")
+        context["year_historical_prices"] = year_historical_total_values.to_json(date_format="iso")
+        year_historical_total_values_differences = get_historical_total_values_differences(
+            year_historical_total_values, self.get_object().get_money_invested_in_portfolio()
+        )
+        context["year_historical_prices_differences"] = year_historical_total_values_differences.to_json(date_format="iso")
+        year_historical_total_values_differences_percentages = get_historical_total_values_differences_percentages(
+            year_historical_total_values, self.get_object().get_money_invested_in_portfolio()
+        )
+        context["year_historical_prices_differences_percentages"] = year_historical_total_values_differences_percentages.to_json(date_format="iso")
 
+        # two years data
         two_years_historical_total_values = get_historical_total_values(portfolio_assets_objects, "2y", "1wk")
-        context["two_years_historical_prices"] = two_years_historical_total_values.to_json(date_format = "iso")
+        context["two_years_historical_prices"] = two_years_historical_total_values.to_json(date_format="iso")
+        two_years_historical_total_values_differences = get_historical_total_values_differences(
+            two_years_historical_total_values, self.get_object().get_money_invested_in_portfolio()
+        )
+        context["two_years_historical_prices_differences"] = two_years_historical_total_values_differences.to_json(date_format="iso")
+        two_years_historical_total_values_differences_percentages = get_historical_total_values_differences_percentages(
+            two_years_historical_total_values, self.get_object().get_money_invested_in_portfolio()
+        )
+        context["two_years_historical_prices_differences_percentages"] = two_years_historical_total_values_differences_percentages.to_json(date_format="iso")
 
+        # five years data
         five_years_historical_total_values = get_historical_total_values(portfolio_assets_objects, "5y", "1mo")
-        context["five_years_historical_prices"] = five_years_historical_total_values.to_json(date_format = "iso")
+        context["five_years_historical_prices"] = five_years_historical_total_values.to_json(date_format="iso")
+        five_years_historical_total_values_differences = get_historical_total_values_differences(
+            five_years_historical_total_values, self.get_object().get_money_invested_in_portfolio()
+        )
+        context["five_years_historical_prices_differences"] = five_years_historical_total_values_differences.to_json(date_format="iso")
+        five_years_historical_total_values_differences_percentages = get_historical_total_values_differences_percentages(
+            five_years_historical_total_values, self.get_object().get_money_invested_in_portfolio()
+        )
+        context["five_years_historical_prices_differences_percentages"] = five_years_historical_total_values_differences_percentages.to_json(date_format="iso")
+
         
         return context
 
