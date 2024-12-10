@@ -2,6 +2,8 @@
 
 {% load static %}
 
+{% load humanize %}
+
 {% block content %}
 
     <h1> {{ portfolio.portfolio_name }} </h1>
@@ -107,17 +109,17 @@
     <table style = "width: 100%">
 
         <tr>
-            <th> Ticker </th>
-            <th> Name </th>
-            <th> Asset Type </th>
-            <th> Purchase Date </th>
-            <th> Quantity </th>
-            <th> Purchase Price </th>
-            <th> Purchase Value </th>
-            <th> Current Price </th>
-            <th> Current Value </th>
-            <th> Value Change </th>
-            <th> Value Change </th>
+            <th style = "white-space: nowrap; width: auto;"> Ticker </th>
+            <th style = "white-space: nowrap; width: auto;"> Name </th>
+            <th style = "white-space: nowrap; width: auto;"> Type </th>
+            <th style = "white-space: nowrap; width: auto;"> Buy Date </th>
+            <th style = "white-space: nowrap; width: auto;"> Buy <br> Quantity </th>
+            <th style = "white-space: nowrap; width: auto;"> Buy <br> Price </th>
+            <th style = "white-space: nowrap; width: auto;"> Buy <br> Value </th>
+            <th style = "white-space: nowrap; width: auto;"> Price <br> Now </th>
+            <th style = "white-space: nowrap; width: auto;"> Value <br> Now </th>
+            <th style = "white-space: nowrap; width: auto;"> Value <br> Diff </th>
+            <th style = "white-space: nowrap; width: auto;"> Percent <br> Diff </th>
         </tr>
 
         {% for portfolio_asset in portfolio_assets_with_info %}
@@ -127,16 +129,16 @@
                 <td> {{ portfolio_asset.portfolio_asset_object.asset.asset_type }} </td>
                 <td> {{ portfolio_asset.portfolio_asset_object.purchase_time }} </td>
                 <td> {{ portfolio_asset.portfolio_asset_object.get_formatted_purchase_quantity }} </td>
-                <td> ${{ portfolio_asset.portfolio_asset_object.purchase_price|floatformat:2 }} </td>
-                <td> ${{ portfolio_asset.portfolio_asset_object.get_initial_value|floatformat:2 }} </td>
-                <td> ${{ portfolio_asset.current_price|floatformat:2 }} </td>
-                <td> ${{ portfolio_asset.current_value|floatformat:2 }} </td>
-                <td>
+                <td class = "right_align"> ${{ portfolio_asset.portfolio_asset_object.purchase_price|floatformat:2|intcomma }} </td>
+                <td class = "right_align"> ${{ portfolio_asset.portfolio_asset_object.get_initial_value|floatformat:2|intcomma }} </td>
+                <td class = "right_align"> ${{ portfolio_asset.current_price|floatformat:2|intcomma }} </td>
+                <td class = "right_align"> ${{ portfolio_asset.current_value|floatformat:2|intcomma }} </td>
+                <td class = "right_align">
                     <span class = "{% if portfolio_asset.current_value_change|slice:":1" == "+" %}positive{% elif portfolio_asset.current_value_change|slice:":1" == "-" %}negative{% endif %}">
                         {{ portfolio_asset.current_value_change }}
                     </span>
                 </td>
-                <td>
+                <td class = "right_align">
                     <span class = "{% if portfolio_asset.current_value_change_percentage|slice:":1" == "+" %}positive{% elif portfolio_asset.current_value_change_percentage|slice:":1" == "-" %}negative{% endif %}">
                         {{ portfolio_asset.current_value_change_percentage }}
                     </span>

@@ -1,29 +1,53 @@
 <div>
     <form method = "get" action = "{% url 'all_assets' %}">
-        <input type = "hidden" name = "from_portfolio" value = "true">
-        
-        <label for = "asset_type"> Choose Asset Type: </label>
-        <select name = "asset_type" id = "asset_type">
-            <option value = "" disabled selected> Not Specified </option>
-            <option value = "stock"> Stocks </option>
-            <option value = "crypto"> Cryptocurrencies</option>
-        </select>
 
-        <label for = "name"> Search by Name: </label>
-        <input type = "text" name = "name" id = "name" placeholder = "Enter asset name">
+        {% if from_portfolio %}
+            <input type = "hidden" name = "from_portfolio" value = "true">
+        {% endif %}
 
-        <label for = "ticker"> Search by Ticker: </label>
-        <input type = "text" name = "ticker" id = "ticker" placeholder = "Enter asset ticker">
+            <table style = "width: 100%">
 
-        <label for = "sort_by"> Sort By: </label>
-        <select name = "sort_by" id = "sort_by">
-            <option value = "" disabled selected> Sort Options </option>
-            <option value = "ticker_asc"> Ticker (A-Z) </option>
-            <option value = "ticker_desc"> Ticker (Z-A) </option>
-            <option value = "name_asc"> Name (A-Z) </option>
-            <option value = "name_desc"> Name (Z-A) </option>
-        </select>
+                <tr>
+                    <th style = "width: 100px"> Ticker </th>
+                    <th> Name </th>
+                    <th style = "width: 200px"> Asset Type </th>
+                    {% if from_portfolio %}
+                        <th style = "width: 325px"> Sorting </th>
+                    {% else %}
+                        <th style = "width: 200px"> Sorting </th>
+                    {% endif %}
+                </tr>
 
-        <button type = "submit"> Search </button>
+            <tr>
+                <td>
+                    <input type = "text" name = "ticker" id = "ticker" placeholder = "Ticker">
+                </td>
+                <td>
+                    <input type = "text" name = "name" id = "name" placeholder = "Enter asset name">
+                </td>
+                <td>
+                    <select name = "asset_type" id = "asset_type">
+                        <option value = "" disabled selected> Select Asset Type </option>
+                        <option value = "stock"> Stocks </option>
+                        <option value = "crypto"> Crypto </option>
+                    </select>
+                </td>
+                <td>
+                    <select name = "sort_by" id = "sort_by">
+                        <option value = "" disabled selected> Sort Options </option>
+                        <option value = "ticker_asc"> Ticker (A-Z) </option>
+                        <option value = "ticker_desc"> Ticker (Z-A) </option>
+                        <option value = "name_asc"> Name (A-Z) </option>
+                        <option value = "name_desc"> Name (Z-A) </option>
+                    </select>
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan = "4" style = "text-align: center;">
+                    <button type = "submit"> Apply Filters </button>
+                </td>
+            </tr>
+        </table>
     </form>
 </div>

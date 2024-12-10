@@ -1,5 +1,7 @@
 {% extends 'investment_tracker/base.html' %}
 
+{% load humanize %}
+
 {% block content %}
 
     <h1> All Portfolios </h1>
@@ -9,24 +11,24 @@
         <tr>
             <th> Portfolio Name </th>
             <th> Portfolio Owner </th>
-            <th> Money Invested in $ </th>
-            <th> Current Price in $ </th>
-            <th> Value Change in $ </th>
-            <th> Value Change in % </th>
+            <th style = "white-space: nowrap; width: 8%;"> Money <br> Invested </th>
+            <th style = "white-space: nowrap; width: 8%;"> Current <br> Value </th>
+            <th style = "white-space: nowrap; width: 8%;"> Value <br> Diff </th>
+            <th style = "white-space: nowrap; width: 8%;"> Percent <br> Diff </th>
         </tr>
 
         {% for portfolio in all_portfolios %}
             <tr>
                 <td> <a href = "{% url 'portfolio' portfolio.slug %}"> {{ portfolio.portfolio_name }} </a> </td>
                 <td> {{ portfolio.portfolio_owner.user.username }} </td>
-                <td> {{ portfolio.get_money_invested_in_portfolio|floatformat:2  }} </td>
-                <td> {{ portfolio.get_current_portfolio_value|floatformat:2  }} </td>
-                <td>
+                <td class = "right_align"> ${{ portfolio.get_money_invested_in_portfolio|floatformat:2|intcomma  }} </td>
+                <td class = "right_align"> ${{ portfolio.get_current_portfolio_value|floatformat:2|intcomma  }} </td>
+                <td class = "right_align">
                     <span class = "{% if portfolio.get_portfolio_value_change|slice:":1" == "+" %}positive{% elif portfolio.get_portfolio_value_change|slice:":1" == "-" %}negative{% endif %}">
                         {{ portfolio.get_portfolio_value_change }}
                     </span>
                 </td>
-                <td>
+                <td class = "right_align">
                     <span class = "{% if portfolio.get_portfolio_value_change_percentage|slice:":1" == "+" %}positive{% elif portfolio.get_portfolio_value_change_percentage|slice:":1" == "-" %}negative{% endif %}">
                         {{ portfolio.get_portfolio_value_change_percentage }}
                     </span>

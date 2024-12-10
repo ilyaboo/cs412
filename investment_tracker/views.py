@@ -376,6 +376,8 @@ class PortfolioCreateView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         draft_assets = self.request.session.get("draft_assets", [])
 
+        self.request.session.pop("editing_portfolio", None)
+
         # extracting current asset prices
         for i in range(len(draft_assets)):
             a_obj = Asset.objects.get(ticker = draft_assets[i]["ticker"])
@@ -390,6 +392,7 @@ class PortfolioCreateView(LoginRequiredMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         """ handles form submission to set portfolio name or finalize """
 
+        self.request.session.pop("editing_portfolio", None)
         portfolio_name = request.POST.get("portfolio_name")
         if portfolio_name:
             request.session["portfolio_name"] = portfolio_name

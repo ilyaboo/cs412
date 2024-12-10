@@ -85,6 +85,86 @@ nav a:hover, .logout-button:hover {
     background-color: #006f53;
 }
 
+/* tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: #154A3B;
+    color: #EAECEE;
+    font-size: 1rem;
+}
+
+table th, table td {
+    padding: 12px;
+    border: 1px solid #A9DFBF;
+    text-align: center;
+}
+
+table th {
+    background-color: #1F6B55;
+    color: #A9DFBF;
+    text-transform: uppercase;
+}
+
+td.right_align {
+    text-align: right;
+}
+
+table tr:nth-child(even) {
+    background-color: #0F3E2E;
+}
+
+table tr:hover {
+    background-color: #1F6B55;
+}
+
+/* input fields and selectors */
+input[type="text"], input[type="number"], input[type="password"], select, textarea {
+    max-width: 400px;
+    width: 100%;
+    padding: 12px 15px;
+    margin: 10px 0;
+    border: 1px solid #76D7C4;
+    border-radius: 5px;
+    background-color: #0B3D2E;
+    color: #EAECEE;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+input[type="text"]:focus, input[type="number"]:focus, input[type="password"]:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #45B39D;
+    box-shadow: 0 0 5px #45B39D;
+}
+
+
+/* buttons */
+button, .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: white;
+    background-color: #008f68;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+}
+
+button:hover, .btn:hover {
+    background-color: #006f53;
+}
+
+/* styling for disabled buttons */
+button:disabled, .btn:disabled {
+    background-color: #5A7E7A;
+    cursor: not-allowed;
+    color: #B2D7D3;
+}
+
 /* main section */
 main {
     padding: 20px;
