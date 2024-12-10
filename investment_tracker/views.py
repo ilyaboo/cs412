@@ -10,7 +10,9 @@ from .models import Profile, Portfolio, Asset, PurchasedAsset
 from .forms import CustomUserCreationForm
 from .utils.yfinance_utils import get_historical_prices
 from .utils.data_processing_utils import get_historical_total_values
-import pandas as pd
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
+
 
 class ShowMainPageView(ListView):
     """ view to display the main page """
@@ -199,25 +201,39 @@ class AddToPortfolioDraftView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         ticker = kwargs["ticker"]
         asset = Asset.objects.get(ticker = ticker)
+        editing_portfolio_id = request.session.get("editing_portfolio")
 
         price = asset.get_current_price()
         quantity = float(request.POST.get("quantity", 1))
         total_cost = float(request.POST.get("total_cost", float(price) * quantity))
+
+        if editing_portfolio_id:
+
+            portfolio = get_object_or_404(Portfolio, id = editing_portfolio_id)
+
+            PurchasedAsset.objects.create(portfolio = portfolio, 
+                                          asset = asset, 
+                                          purchase_price = price, 
+                                          purchase_quantity = quantity)
         
-        # adding the asset to the draft in the session
-        draft_assets = request.session.get("draft_assets", [])
+            # redirecting back to portfolio page after updating the draft
+            return redirect(reverse("portfolio", kwargs = {"slug": portfolio.slug}))
+        else:
 
-        # checking if this asset is already present in the draft
-        if asset.ticker in [val["ticker"] for val in draft_assets]:
-            i = [val["ticker"] for val in draft_assets].index(asset.ticker)
-            draft_assets[i]["quantity"] += quantity
-            draft_assets[i]["total_cost"] += quantity * draft_assets[i]["price"]
-        else:    
-            draft_assets.append({"ticker": asset.ticker, "name": asset.name, "price": price, "quantity": quantity, "total_cost": total_cost})
-        request.session["draft_assets"] = draft_assets
+            # adding the asset to the draft in the session
+            draft_assets = request.session.get("draft_assets", [])
 
-        return redirect(reverse("create_portfolio"))
-    
+            # checking if this asset is already present in the draft
+            if asset.ticker in [val["ticker"] for val in draft_assets]:
+                i = [val["ticker"] for val in draft_assets].index(asset.ticker)
+                draft_assets[i]["quantity"] += quantity
+                draft_assets[i]["total_cost"] += quantity * draft_assets[i]["price"]
+            else:    
+                draft_assets.append({"ticker": asset.ticker, "name": asset.name, "price": price, "quantity": quantity, "total_cost": total_cost})
+            request.session["draft_assets"] = draft_assets
+
+            return redirect(reverse("create_portfolio"))
+        
 class AssetsListView(ListView):
     """ view to display all assets """
 
@@ -403,3 +419,22 @@ class CreatedPortfolioView(LoginRequiredMixin, View):
         request.session.pop("draft_assets", None)
 
         return redirect("portfolio", portfolio.slug)
+    
+@login_required
+def purchase_assets_for_portfolio(request, slug):
+    """ handles purchasing additional assets for an existing portfolio """
+
+    try:
+        portfolio = Portfolio.objects.get(slug = slug)
+    except Portfolio.DoesNotExist:
+        return HttpResponseForbidden("Portfolio does not exist or you do not have access.")
+
+    # ensuring the current user is the owner of the portfolio
+    if portfolio.portfolio_owner.user != request.user:
+        return HttpResponseForbidden("You are not authorized to purchase assets for this portfolio.")
+
+    # initializing the session draft for asset purchase
+    request.session["draft_assets"] = []
+    request.session["editing_portfolio"] = portfolio.id
+
+    return redirect(reverse("all_assets") + "?from_portfolio=true")

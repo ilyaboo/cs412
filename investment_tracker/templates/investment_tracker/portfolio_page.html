@@ -6,6 +6,12 @@
 
     <h1> {{ portfolio.portfolio_name }} </h1>
 
+    {% if request.user == portfolio.portfolio_owner.user %}
+        <form method = "get" action = "{% url 'purchase_assets_for_portfolio' portfolio.slug %}">
+            <button type = "submit"> Purchase Assets for This Portfolio </button>
+        </form>
+    {% endif %}
+
     <!-- period selection -->
     <div>
         <label for = "timePeriod"> Select Time Period: </label>

@@ -18,4 +18,5 @@ urlpatterns = [
     path("add_to_draft/<str:ticker>/", views.AddToPortfolioDraftView.as_view(), name = "add_to_draft"),
     path("edit_draft_asset/<str:ticker>/", views.EditDraftAssetView.as_view(), name = "edit_draft_asset"),
     path("remove_draft_asset/<str:ticker>/", views.RemoveDraftAssetView.as_view(), name = "remove_draft_asset"),
+    path('portfolio/<uuid:slug>/purchase/', views.purchase_assets_for_portfolio, name = "purchase_assets_for_portfolio"),
 ]
