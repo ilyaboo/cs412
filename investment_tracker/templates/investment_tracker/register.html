@@ -1,17 +1,36 @@
 {% extends 'investment_tracker/base.html' %}
 
 {% block content %}
+<div class = "container">
+    <h1> Register </h1>
 
-    <div class = "container">
+    <form method = "post" novalidate class = "minimal-form">
+        {% csrf_token %}
 
-        <h2> Register </h2>
+        <!-- rendering the form fields -->
+        {% for field in form %}
+        <div class = "form-group">
+            {{ field }}
 
-        <form method = "post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type = "submit"> Register </button>
-        </form>
+            {% if field.help_text %}
+                <small class = "help-text"> {{ field.help_text }} </small>
+            {% endif %}
 
-    </div>
+            {% for error in field.errors %}
+                <small class = "error-text"> {{ error }} </small>
+            {% endfor %}
+        </div>
+        {% endfor %}
 
+        <div>
+            <button type = "submit" class = "button"> Register </button>
+        </div>
+
+        {% if form.errors %}
+            <div class = "error-text">
+                Please correct the errors in the form.
+            </div>
+        {% endif %}
+    </form>
+</div>
 {% endblock %}

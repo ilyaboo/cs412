@@ -34,6 +34,6 @@ class CustomUserCreationForm(UserCreationForm):
         self.fields["password2"].widget.attrs.update({"placeholder": "Re-enter your password"})
 
         # Optional: Remove default help_text or modify it
-        self.fields["username"].help_text = "This username will be seen by other users"
+        self.fields["username"].help_text = "\nThis username will be seen by other users"
         self.fields["password1"].help_text = "Your password must be at least 8 characters long and contain a mix of letters, numbers, and symbols."
         self.fields["password2"].help_text = "Re-enter the same password as above."

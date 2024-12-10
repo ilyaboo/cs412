@@ -297,3 +297,73 @@ canvas {
 .button-link:hover {
     background-color: #006f53;
 }
+
+/* for login */
+.narrow-input {
+    width: 250px !important;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* email style for registration */
+input[type="email"] {
+    max-width: 400px;
+    width: 100%;
+    padding: 12px 15px;
+    margin: 10px 0;
+    border: 1px solid #76D7C4;
+    border-radius: 5px;
+    background-color: #0B3D2E;
+    color: #EAECEE;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+input[type="email"]:focus {
+    outline: none;
+    border-color: #45B39D;
+    box-shadow: 0 0 5px #45B39D;
+}
+
+/* registration design */
+.minimal-form {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #0B3D2E;
+    border: 2px solid #A9DFBF;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.styled-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    background-color: #0B3D2E;
+    color: #EAECEE;
+    border: 1px solid #76D7C4;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.styled-input:focus {
+    outline: none;
+    border-color: #45B39D;
+    box-shadow: 0 0 5px #45B39D;
+}
+
+.help-text {
+    font-size: 0.8rem;
+    color: #A9DFBF;
+    display: block;
+    margin-top: 5px;
+}
+
+.error-text {
+    color: #E74C3C;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}

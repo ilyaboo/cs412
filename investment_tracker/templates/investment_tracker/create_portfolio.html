@@ -35,12 +35,12 @@
                     </div>
                 </td>
             </tr>
+            {% endfor %}
             <tr>
                 <td colspan = "5">
                     <h3>Total Cost: ${{ total_cost|floatformat:2 }}</h3>
                 </td>
             </tr>
-            {% endfor %}
         </table>
 
     {% else %}
