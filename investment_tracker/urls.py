@@ -19,4 +19,7 @@ urlpatterns = [
     path("edit_draft_asset/<str:ticker>/", views.EditDraftAssetView.as_view(), name = "edit_draft_asset"),
     path("remove_draft_asset/<str:ticker>/", views.RemoveDraftAssetView.as_view(), name = "remove_draft_asset"),
     path('portfolio/<uuid:slug>/purchase/', views.purchase_assets_for_portfolio, name = "purchase_assets_for_portfolio"),
+    path("portfolio/<slug:slug>/delete/", views.DeletePortfolioView.as_view(), name = "delete_portfolio"),
+    path('portfolio/<slug:slug>/rename/', views.RenamePortfolioPageView.as_view(), name = "rename_portfolio_page"),
+    path('portfolio/<slug:slug>/rename/submit/', views.RenamePortfolioView.as_view(), name = "rename_portfolio"),
 ]

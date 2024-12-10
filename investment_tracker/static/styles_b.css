@@ -179,3 +179,87 @@ footer {
     border-top: 2px solid #A9DFBF;
     color: #EAECEE;
 }
+
+/* style for graphs */
+.graph-container {
+    width: 50%;
+    height: 80%;
+    float: right;
+    box-sizing: border-box;
+}
+
+canvas {
+    width: 100% !important;
+    height: auto !important;
+}
+
+/* grid for portfolio graphs and info */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 20px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.grid-container-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(1, 1fr);
+    gap: 20px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.grid-item {
+    background-color: #0B3D2E;
+    border: 2px solid #A9DFBF;
+    border-radius: 8px;
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.info p {
+    margin: 5px 0;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #EAECEE;
+}
+
+/* period selector and control buttons alignment */
+.controls {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.button-row {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.button-row .button {
+    display: inline-block;
+    padding: 8px 15px;
+    font-size: 1rem;
+    background-color: #008f68;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button-row .button:hover {
+    background-color: #006f53;
+}

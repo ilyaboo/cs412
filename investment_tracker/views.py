@@ -3,6 +3,7 @@ from django.db.models.base import Model as Model
 from django.http import JsonResponse
 from django.urls import reverse
 from django.views.generic import View, ListView, DetailView, TemplateView
+from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, render, redirect
@@ -117,7 +118,11 @@ class PortfolioPageView(DetailView):
 
         context["portfolio_assets_with_info"] = portfolio_assets_with_info
         context["portfolio_assets_with_info"].sort(key = lambda x: x["current_value"], reverse = True)
-
+        context["portfolio_assets_to_display"] = [asset["portfolio_asset_object"].asset.name[ : -1] for asset in context["portfolio_assets_with_info"][ : 3]]
+        if len(context["portfolio_assets_with_info"]) > 3:
+            context["portfolio_assets_to_display"] = "; ".join(context["portfolio_assets_to_display"]) + "; etc."
+        else:
+            context["portfolio_assets_to_display"] = "; ".join(context["portfolio_assets_to_display"])
 
         # obtaining and processing data for graphs
 
@@ -495,7 +500,57 @@ class CreatedPortfolioView(LoginRequiredMixin, View):
         request.session.pop("draft_assets", None)
 
         return redirect("portfolio", portfolio.slug)
+
+class DeletePortfolioView(LoginRequiredMixin, View):
+    """ view to handle portfolio deletion """
+
+    def post(self, request, *args, **kwargs):
+
+        slug = kwargs.get("slug")
+        portfolio = get_object_or_404(Portfolio, slug = slug)
+
+        # ensuring only the owner can delete the portfolio
+        if request.user == portfolio.portfolio_owner.user:
+            portfolio_assets = PurchasedAsset.objects.filter(portfolio = portfolio)
+            for a in portfolio_assets:
+                a.delete()
+            portfolio.delete()
+            messages.success(request, "Portfolio successfully deleted.")
+            return redirect(reverse("my_portfolios"))
+        else:
+            messages.error(request, "You do not have permission to delete this portfolio.")
+            return redirect(reverse("portfolio", kwargs = {"slug": slug}))
+        
+class RenamePortfolioPageView(View):
+    """ displays the rename portfolio page """
+
+    def get(self, request, slug, *args, **kwargs):
+        portfolio = get_object_or_404(Portfolio, slug = slug)
+        
+        # ensuring only the owner can access the page
+        if request.user != portfolio.portfolio_owner.user:
+            return redirect("portfolio", slug = portfolio.slug)
+        
+        return render(request, "investment_tracker/rename_portfolio.html", {"portfolio": portfolio})
     
+class RenamePortfolioView(View):
+    """ handles renaming the portfolio. """
+
+    def post(self, request, slug, *args, **kwargs):
+        portfolio = get_object_or_404(Portfolio, slug = slug)
+        
+        # ensuring only the owner can rename
+        if request.user != portfolio.portfolio_owner.user:
+            return redirect("portfolio", slug = portfolio.slug)
+
+        # getting the new name from the form
+        new_name = request.POST.get("new_name")
+        if new_name:
+            portfolio.portfolio_name = new_name
+            portfolio.save()
+        
+        return redirect("portfolio", slug = portfolio.slug)
+
 @login_required
 def purchase_assets_for_portfolio(request, slug):
     """ handles purchasing additional assets for an existing portfolio """

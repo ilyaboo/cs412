@@ -1,0 +1,20 @@
+{% extends 'investment_tracker/base.html' %}
+
+{% block content %}
+
+    <h2> Rename Portfolio "{{ portfolio.portfolio_name }}"</h2>
+
+    <form method = "post" action = "{% url 'rename_portfolio' portfolio.slug %}">
+        {% csrf_token %}
+
+        <input 
+            type = "text" 
+            id = "new_name" 
+            name = "new_name" 
+            placeholder = "New Portfolio Name" 
+            style = "padding: 10px; margin: 10px 0; border: 1px solid #76D7C4; border-radius: 5px; width: 100%; max-width: 400px;"
+        >
+        <button type = "submit" class = "button"> Rename </button>
+    </form>
+
+{% endblock %}

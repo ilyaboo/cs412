@@ -6,34 +6,77 @@
 
 {% block content %}
 
-    <h1> {{ portfolio.portfolio_name }} </h1>
-
-    {% if request.user == portfolio.portfolio_owner.user %}
-        <form method = "get" action = "{% url 'purchase_assets_for_portfolio' portfolio.slug %}">
-            <button type = "submit"> Purchase Assets for This Portfolio </button>
-        </form>
-    {% endif %}
-
-    <!-- period selection -->
-    <div>
-        <label for = "timePeriod"> Select Time Period: </label>
-        <select id = "timePeriod">
-            <option value = "1d"> 1 Day </option>
-            <option value = "5d"> 5 Days </option>
-            <option value = "1mo" selected> 1 Month </option>
-            <option value = "3mo"> 3 Months </option>
-            <option value = "6mo"> 6 Months </option>
-            <option value = "1y"> 1 Year </option>
-            <option value = "2y"> 2 Years </option>
-            <option value = "5y"> 5 Years </option>
-        </select>
-    </div>
+    <h1> "{{ portfolio.portfolio_name }}" Portfolio </h1>
 
     <!-- graph container -->
-    <canvas id = "priceChart" width = "400" height = "200"></canvas>
-    <canvas id = "differenceChart" width = "400" height = "200"></canvas>
-    <canvas id = "differencePercentagesChart" width = "400" height = "200"></canvas>
+    <div class = "grid-container">
+        <div class = "grid-item">
 
+            <div class="info">
+                <p><strong>Created By:</strong> {{ portfolio.portfolio_owner.user.username }}</p>
+                <p><strong>Created On:</strong> {{ portfolio.portfolio_creation_time }}</p>
+                <p><strong>Assets:</strong> {{ portfolio_assets_to_display }}</p>
+                <p><strong>Total Invested:</strong> ${{ portfolio.get_money_invested_in_portfolio|floatformat:2 }}</p>
+                <p><strong>Current Value:</strong> ${{ portfolio.get_current_portfolio_value|floatformat:2 }}</p>
+                <p>
+                    <strong>Value Change ($):</strong> 
+                    <span class="{% if portfolio.get_portfolio_value_change|slice:":1" == "+" %}positive{% elif portfolio.get_portfolio_value_change|slice:":1" == "-" %}negative{% endif %}">
+                        {{ portfolio.get_portfolio_value_change }}
+                    </span>
+                </p>
+                <p>
+                    <strong>Value Change (%):</strong> 
+                    <span class="{% if portfolio.get_portfolio_value_change_percentage|slice:":1" == "+" %}positive{% elif portfolio.get_portfolio_value_change_percentage|slice:":1" == "-" %}negative{% endif %}">
+                        {{ portfolio.get_portfolio_value_change_percentage }}
+                    </span>
+                </p>
+            </div>
+
+            <!-- period selection -->
+            <div class = "controls">
+                <label for = "timePeriod"> Select Time Period: </label>
+                <select id = "timePeriod">
+                    <option value = "1d"> 1 Day </option>
+                    <option value = "5d"> 5 Days </option>
+                    <option value = "1mo" selected> 1 Month </option>
+                    <option value = "3mo"> 3 Months </option>
+                    <option value = "6mo"> 6 Months </option>
+                    <option value = "1y"> 1 Year </option>
+                    <option value = "2y"> 2 Years </option>
+                    <option value = "5y"> 5 Years </option>
+                </select>
+            </div>
+
+            <!-- portfolio controls -->
+            <div class = "button-row">
+                {% if request.user == portfolio.portfolio_owner.user %}
+                    <form method = "get" action = "{% url 'purchase_assets_for_portfolio' portfolio.slug %}">
+                        <button type = "submit" class = "button"> Purchase Assets </button>
+                    </form>
+
+                    <form method = "get" action = "{% url 'rename_portfolio_page' portfolio.slug %}">
+                        <button type = "submit" class = "button"> Rename Portfolio </button>
+                    </form>
+
+                    <form method = "post" action = "{% url 'delete_portfolio' portfolio.slug %}">
+                        {% csrf_token %}
+                        <button type = "submit" class = "button" style = "background-color: #E74C3C;"> Delete Portfolio </button>
+                    </form>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <div class = "grid-item">
+            <canvas id = "differencePercentagesChart"></canvas>
+        </div>
+        <div class = "grid-item">
+            <canvas id = "priceChart"></canvas>
+        </div>
+        <div class = "grid-item">
+            <canvas id = "differenceChart"></canvas>
+        </div>
+    </div>
 
 
     <!-- hidden divs to store JSON data for each time period -->
@@ -85,26 +128,6 @@
     <script src = "{% static 'js/value_chart.js' %}"></script>
     <script src = "{% static 'js/value_chart_diff.js' %}"></script>
     <script src = "{% static 'js/value_chart_diff_percent.js' %}"></script>
-
-    <h3> Created by {{ portfolio.portfolio_owner.user.username }} <h3>
-    <br>
-    <h3> Created on {{ portfolio.portfolio_creation_time }} </h3>
-    <br>
-    <h3> Total Invested: ${{ portfolio.get_money_invested_in_portfolio|floatformat:2 }} </h3>
-    <br>
-    <h3> Current Value: ${{ portfolio.get_current_portfolio_value|floatformat:2 }} </h3>
-    <br>
-    <h3> Value Change in $: 
-        <span class = "{% if portfolio.get_portfolio_value_change|slice:":1" == "+" %}positive{% elif portfolio.get_portfolio_value_change|slice:":1" == "-" %}negative{% endif %}">
-            {{ portfolio.get_portfolio_value_change }}
-        </span>
-    </h3>
-    <br> 
-    <h3> Value Change in %: 
-        <span class = "{% if portfolio.get_portfolio_value_change_percentage|slice:":1" == "+" %}positive{% elif portfolio.get_portfolio_value_change_percentage|slice:":1" == "-" %}negative{% endif %}">
-            {{ portfolio.get_portfolio_value_change_percentage }}
-        </span>
-    </h3>
 
     <table style = "width: 100%">
 

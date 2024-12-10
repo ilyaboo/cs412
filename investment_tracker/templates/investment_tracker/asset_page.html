@@ -6,30 +6,37 @@
 
 {% block content %}
 
-    <h1>Asset Information</h1>
+    <h1> {{ asset.name }} ({{ asset.ticker }})</h1>
 
-    <p><strong>Ticker:</strong> {{ asset.ticker }}</p>
-    <p><strong>Name:</strong> {{ asset.name }}</p>
-    <p><strong>Price per Unit:</strong> $<span id="price">{{ price|floatformat:2 }}</span></p>
-    <p><strong>Type:</strong> {{ asset.asset_type }}</p>
+    <div class = "grid-container-2">
+        <div class = "grid-item">
 
-    <!-- period selection -->
-    <div>
-        <label for = "timePeriod"> Select Time Period: </label>
-        <select id = "timePeriod">
-            <option value = "1d"> 1 Day </option>
-            <option value = "5d"> 5 Days </option>
-            <option value = "1mo" selected> 1 Month </option>
-            <option value = "3mo"> 3 Months </option>
-            <option value = "6mo"> 6 Months </option>
-            <option value = "1y"> 1 Year </option>
-            <option value = "2y"> 2 Years </option>
-            <option value = "5y"> 5 Years </option>
-        </select>
+            <div class = "info">
+                <p><strong>Ticker:</strong> {{ asset.ticker }}</p>
+                <p><strong>Name:</strong> {{ asset.name }}</p>
+                <p><strong>Current Price:</strong> $<span id="price">{{ price|floatformat:2 }}</span></p>
+                <p><strong>Type:</strong> {{ asset.asset_type }}</p>
+            </div>
+
+            <div class = "controls">
+                <label for = "timePeriod"> Select Time Period: </label>
+                <select id = "timePeriod">
+                    <option value = "1d"> 1 Day </option>
+                    <option value = "5d"> 5 Days </option>
+                    <option value = "1mo" selected> 1 Month </option>
+                    <option value = "3mo"> 3 Months </option>
+                    <option value = "6mo"> 6 Months </option>
+                    <option value = "1y"> 1 Year </option>
+                    <option value = "2y"> 2 Years </option>
+                    <option value = "5y"> 5 Years </option>
+                </select>
+            </div>
+        </div>
+
+        <div class = "grid-item">
+            <canvas id = "priceChart"></canvas>
+        </div>
     </div>
-
-    <!-- graph container -->
-    <canvas id = "priceChart" width = "400" height = "200"></canvas>
 
     <!-- hidden divs to store JSON data for each time period -->
     <div id = "dayHistoricalPrices" style = "display: none;"> {{ day_historical_prices|safe }} </div>
